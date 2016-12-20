@@ -81,14 +81,14 @@ class Test extends Public_Controller {
 		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		// 需要修改的账号信息
 		$cTMailAlias = 'jh@xkeshi.so';//邮箱名（不可改，但可以申请别名）
-		$name = '姜杭';//姓名
-		$gender = '1';//性别（男1,女2）
-		$mobile = '12300000000';//手机号
-		$password = 'Ni123456';//密码（有设定）
-		$partypath = 'IT部/运维部';//部门（必须存在）
-		$position = '网管';//职务
-
-		$result = $this->email_model->mod_email($access_token,$cTMailAlias,$name,$gender,$position,$mobile,$password,$partypath);
+		//$name = '姜杭';//姓名
+		//$gender = '1';//性别（男1,女2）
+		//$mobile = '12300000000';//手机号
+		//$password = 'Ni123456';//密码（有设定）
+		//$partypath = 'IT部/运维部';//部门（必须存在）
+		//$position = '网管';//职务
+		$opentype = '2';//状态（0不设置状态；1启用账号；2禁用账号）
+		$result = $this->email_model->mod_email($access_token,$cTMailAlias,$opentype);
 		if ($result == NULL) {
 			echo "修改成功";
 		}

@@ -76,6 +76,12 @@ class User extends Admin_Controller {
 	}	
 	public function delete()
 	{
+		// 企业邮箱的管理员ID
+		$cTMailID = $this->config->item('ops_email_id');
+		// 接口Key
+		$cTMailSecret = $this->config->item('ops_email_key');
+		// 获取OAuth验证授权
+		$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
 		$user_id = $this->input->get('user_id', TRUE);
 		$adminname = $this->session->userdata('adminname');
 		$admin_id = $this->session->userdata('admin_id');
@@ -90,6 +96,8 @@ class User extends Admin_Controller {
 				$search =$this->user_model->search_user_by_uid($email);//查询ldap
 				if ($search) {
 					$ldap_del = $this->user_model->ldap_del($email);//删除ldap
+					$opentype = '2';//状态（0不设置状态；1启用账号；2禁用账号）
+					$this->user_model->email_disable($access_token,$email,$opentype);// 邮箱禁用
 					if ($ldap_del) {
 						$this->user_model->insert_user_login_logs($admin_id);//添加记录操作日志
 						echo $name;//删除操作成功，输出姓名

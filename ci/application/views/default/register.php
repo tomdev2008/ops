@@ -10,7 +10,7 @@
                                   <div class="span12">
  <?php
     // $onsubmit = array('' => , );
-    $attributes = ['class' => 'form-horizontal', 'id' => 'form_sample_1' ,'onsubmit' => 'return buttoncheck()'];
+    $attributes = ['class' => 'form-horizontal', 'id' => 'resform' ,'onsubmit' => 'return buttoncheck()'];
     echo form_open('register',$attributes);
 ?>
     <fieldset>
@@ -46,9 +46,9 @@
               </div>
           </div>
           <div class="control-group">
-          
+
           <label class="control-label">
-          <strong>账号密码66<span class="required">*</span><br></strong>
+          <strong>账号密码<span class="required">*</span><br></strong>
           </label>
               <div class="controls">
                   <input type="password" style="width:250px;height:30px" id="password1" name="password1" data-required="1" class="span2 m-wrap"/>
@@ -83,7 +83,7 @@
           </div>
           </div>
                 <div class="form-actions">
-                  <button type="button" class="btn btn-primary" id="btn" style="margin-left: 20%" onclick="return from_check()">确认</button>
+                  <button type="submit" class="btn btn-primary" id="btn" style="margin-left: 20%" onclick="return from_check()">确认</button>
                   <button type="button" class="btn" onclick="location.href='http://<?php echo $_SERVER['HTTP_HOST']?>' ">取消</button>
                 </div>
           </fieldset>
@@ -138,9 +138,91 @@
           }
         })
       })
-      // 密码验证
-      $("#password1").on('keyon',function(){
-
+      // 密码验证规则
+      $("#password1").on('keyup',function(val){
+        $.ajax({
+          url:"register/password_check?password=" + $(this).val(),
+          success:function(data){
+            if (data == "1" && $('#password1').val().length >= 6) {
+              // 清除元素
+              $("#password_warning").empty();
+              $("#password_success").empty();
+              // 添加正确提醒元素
+              $("#password1").after('<span class="label label-success" id="password_success"><i class="icon-ok icon-white"></i></span>');
+            }
+            else{
+              // 焦点回归
+              $("#password1").focus();
+              // 清除元素
+              $("#password_warning").empty();
+              $("#password_success").empty();
+              // 添加错误提醒元素
+              $("#password1").after('<span class="label label-important" id="password_warning"><i class="icon-remove icon-white"></i></span>');
+            }
+          }
+        });
+      })
+      // 密码规则提醒
+      $("#password1").on('change',function(val){
+        $.ajax({
+          url:"register/password_check?password=" + $(this).val(),
+          success:function(data){
+            if (data == "1" && $('#password1').val().length >= 6) {
+              // layer提示框
+              layer.msg('密码可用！', {time: 2000,icon: 1});
+            }
+            else{
+              // layer提示框
+              layer.msg('密码必须由字母和数字组成，且大于等于六位！', {time: 2000,icon: 1});
+            }
+          }
+        });
+      })
+      // 确认密码核对
+      $("#password2").on('change',function(val){
+        if ($('#password1').val() != $(this).val()) {
+          // 焦点回归
+          $("#password2").focus();
+          // layer提示框
+          layer.msg('2次密码输入不一致！', {time: 2000,icon: 1});
+          // 清除元素
+          $("#password2_warning").empty();
+          $("#password2_success").empty();
+          // 添加错误提醒元素
+          $("#password2").after('<span class="label label-important" id="password2_warning"><i class="icon-remove icon-white"></i></span>');
+        }
+        else{
+          // 清除元素
+          $("#password2_warning").empty();
+          $("#password2_success").empty();
+          // 添加正确提醒元素
+          $("#password2").after('<span class="label label-success" id="password2_success"><i class="icon-ok icon-white"></i></span>');
+        }
+      })
+      // 验证码验证
+      $("#captcha").on('keyup',function(val) {
+        $.ajax({
+            url:"/register/captcha_check?captcha=" + $(this).val(),
+            type:"GET",
+            success:function(data) {
+              if (data == "1") {
+                // 清除元素
+                $("#captcha_warning").empty();
+                $("#captcha_success").empty();
+                // 添加正确提醒元素
+                $("#captcha").after('<span class="label label-success" id="captcha_success"><i class="icon-ok icon-white"></i></span>');
+              }
+              if (data == "0"){
+                // 焦点回归
+                $("#captcha").focus();
+                // 清除元素
+                $("#captcha_warning").empty();
+                $("#captcha_success").empty();
+                // 添加错误提醒元素
+                $("#captcha").after('<span class="label label-important" id="captcha_warning"><i class="icon-remove icon-white"></i></span>');
+              }
+            }
+          });
       })
       // 按钮提交控制
       function buttoncheck(){
@@ -207,19 +289,20 @@
           return false;
         }
         if (res == 1) {
+          var r
           $.ajax({
             url:"/register/captcha_check?captcha="+captcha.val(),
             type:"GET",
             success:function(data) {
               if (data == "1") {
-                 return true;
+                 $('#resform')[0].submit();//表单提交
               }
-              if (data == "0"){
+              else if (data == "0"){
                 layer.msg('验证码错误，请重试！', {time: 2000,icon: 1});
-                return false;
               }
             }
           });
+          return false;
         }
       }
   </script>

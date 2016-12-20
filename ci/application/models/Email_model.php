@@ -119,7 +119,7 @@ class Email_model extends CI_Model {
 		return $json_obj;
  	}
  	// 修改成员邮箱信息（已测试）
- 	public function mod_email($cTMailAccessToken,$cTMailAlias,$name,$gender,$position,$mobile,$password,$partypath)
+ 	public function mod_email($cTMailAccessToken,$cTMailAlias,$name,$gender,$position,$mobile,$password,$partypath,$opentype)
  	{ 		
  		$cTMailContentData = [
 			'access_token' => $cTMailAccessToken,
@@ -130,7 +130,22 @@ class Email_model extends CI_Model {
 			'position' => $position,
 			'mobile' => $mobile,
 			'password' => $password,
-			'partypath' => $partypath
+			'partypath' => $partypath,
+			'opentype' => $opentype
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+ 	}
+ 	// 修改成员邮箱信息(改为禁用状态)
+ 	public function email_disable($cTMailAccessToken,$cTMailAlias,$opentype)
+ 	{ 		
+ 		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'action' => 3,//修改为3
+			'alias' => $cTMailAlias,
+			'opentype' => $opentype
 		];
 		$headers = array('Content-Type' => 'application/json');
 		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);

@@ -306,4 +306,18 @@ class User_model extends CI_Model {
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
 	}
+	// 修改成员邮箱信息(改为禁用状态)
+ 	public function email_disable($cTMailAccessToken,$cTMailAlias,$opentype)
+ 	{ 		
+ 		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'action' => 3,//修改为3
+			'alias' => $cTMailAlias,
+			'opentype' => $opentype
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+ 	}
 }

@@ -167,4 +167,15 @@ class Register_model extends CI_Model {
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
 	}
+	// 检查注册密码格式
+	public function check_password($password)
+	{
+		$pass = "/^(?![^a-zA-Z]+$)(?!\D+$)/";
+		if (preg_match($pass,$password)) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 }

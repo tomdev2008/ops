@@ -92,7 +92,6 @@
                                                         else{
                                                             echo "<strong>组长</strong>";
                                                         }
-                                                       
                                                     ?>
                                                 </td>
                                                 <td class="actions">
@@ -104,7 +103,6 @@
                                                         <button type="button" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-pencil"></i>修改</button></a>
                                                     <a href="javascript:;" class="runcode" onclick="get_user_delete('<?php echo $user->id?>')">
                                                         <button type="button" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove"></i>离职</button></a>
-                                                        
                                                     </p>
                                                 </div>
                                                 </td>

@@ -111,14 +111,24 @@ class Register extends CI_Controller {
 			}
 		}
 	}
+	public function password_check()
+	{
+		$password = $this->input->get('password');
+		if ($password == "" || !$this->register_model->check_password($password)) {
+			echo "0";//密码匹配失败
+		}
+		else{
+			echo "1";//密码匹配通过
+		}
+	}
 	public function captcha_check()
 	{
 		$captcha = $this->input->get("captcha");
 		if ($this->session->userdata('captcha') == $captcha){
-				echo "1";
+				echo "1";//验证码验证通过
 			}
 			else{
-				echo "0";
+				echo "0";//验证码验证失败
 			}
 	}
 	public function show()
