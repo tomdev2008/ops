@@ -1,0 +1,415 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Disconfig extends Public_Controller {
+
+	public function __construct() {
+		parent::__construct();
+		$this->load->library(array('session', 'form_validation','zip'));
+		$this->load->helper(array('form', 'url', 'cookie','download','date'));
+		$this->load->model('disconfig_model');
+		$this->load->model('statistics_model');
+	}
+
+	public function index()
+	{
+		$id = $this->session->userdata('u_id');
+		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
+		if ($groupleader_flag == 1) {
+		$data = array();
+		$query = $this->db->query('select distinct app_id from ops_disconfig ');
+		$data = $query->result();
+		$this->_data['app'] = $data;
+		$this->_data['title'] = '配置中心';
+		$this->_data['get_project_name'] = $this->disconfig_model->get_project_name();
+		$this->load->view('default/header');
+		$this->load->view('default/disconfig',$this->_data);
+		$this->load->view('default/footer');
+		} else {
+			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+		}
+	}
+
+	public function downloadfile($id=NULL){
+		$id = $this->session->userdata('u_id');
+		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
+		if ($groupleader_flag == 1) {
+		if ($id == NULL) {
+			show_error("error_request",502);
+		}
+		elseif ($sensitive_id = $this->disconfig_model->get_sensitive_by_id($id) == 0) {
+			$disconf = $this->disconfig_model->get_conf_data_by_id($id);
+			$name = $disconf->name;
+			$data = $disconf->value;
+			force_download($name, $data);
+		}
+		else {
+			echo '该信息属于敏感信息，不能下载，如果有问题，请联系运维组！点击浏览器后退，可返回上一个页面！';
+		}
+		} else {
+			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+		}
+	}
+	// public function downloadzip(){
+	// 	$app = $this->input->get('app');
+	// 	$env = $this->input->get('env');
+	// 	$version = $this->input->get('version');
+	// 	$disconf = $this->disconfig_model->get_info_by_app_env_version($app,$env,$version);
+	// 	$zip_data = array(
+	// 			$value->name => $value->value
+	// 		);
+	// 	$zip_data = array();
+	// 	foreach ($disconf as $value ) {
+	// 		$zip_data[$value->name] = $value->value;
+	// 	}
+	// 	@$this->zip->add_data($zip_data);
+	// 	$this->zip->archive('/tmp/'.$app.'_disconfig.zip');
+	// 	switch ($env) {
+	// 		case 1:
+	// 			$env = "dev";
+	// 			break;
+	// 		case 2:
+	// 			$env = "test";
+	// 			break;
+	// 		case 3:
+	// 			$env = "pre";
+	// 			break;
+	// 		case 4:
+	// 			$env = "online";
+	// 			break;
+	// 		case 5:
+	// 			$env = "local";
+	// 			break;
+	// 		case 6:
+	// 			$env = "autoprepub";
+	// 			break;
+	// 		default:
+	// 			$env = "";
+	// 			break;
+	// 	}
+	// 	$this->zip->download('APP'.$app.'_ENV'.$env.'_VERSION'.$version.'.zip');
+	// 	$this->zip->clear_data();
+	// 	// $name = $disconf->name;
+	// 	// $data = $disconf->value;
+	// 	// force_download($name, $data);
+	// }
+	public function value($id=NULL){
+		$user_id = $this->session->userdata('u_id');
+		$groupleader_flag = $this->disconfig_model->get_leader_by_id($user_id);
+		if ($groupleader_flag == 1) {
+		if ($id == NULL) {
+			show_error("error_request",502);
+		}
+		else{
+		$this->_data['conf_data'] = $this->disconfig_model->get_conf_data_by_id($id);
+		$this->_data['sensitive_id'] = $this->disconfig_model->get_sensitive_by_id($id);
+		$this->load->view('default/disconfig_value',$this->_data);
+		}
+		} else {
+			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+		}
+	}
+	public function update($id=NULL){
+		$user_id = $this->session->userdata('u_id');
+		$groupleader_flag = $this->disconfig_model->get_leader_by_id($user_id);
+		if ($groupleader_flag == 1) {
+		if ($id == NULL) {
+			show_error("error_request",502);
+		}
+		else{
+			$this->_data['conf_data'] = $this->disconfig_model->get_conf_data_by_id($id);
+			$this->_data['sensitive_id'] = $this->disconfig_model->get_sensitive_by_id($id);
+			$this->load->view('default/disconfig_update',$this->_data);
+		}
+		} else {
+			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+		}
+	}
+	public function amend(){
+		$id = $this->session->userdata('u_id');
+		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
+		if ($groupleader_flag == 1) {
+		$this->form_validation->set_rules('text_amend', 'text_amend','required');
+		$this->form_validation->set_rules('id_hidden', 'id_hidden','required');
+		$text_amend = $this->input->post('text_amend');
+		$id_hidden = $this->input->post('id_hidden');
+		$env_flag = $this->disconfig_model->get_env_by_id($id_hidden);
+		// $update_time = date("Y-m-d H:i:s",time());
+		if ($env_flag == 1 || $env_flag == 2) {
+			$data = [
+					'value' => $text_amend,
+					// 'update_time' => $update_time
+				];
+			$amend = $this->disconfig_model->update_value($id_hidden,$data);
+			if($amend){
+				echo "<script>
+						alert('配置修改成功！');
+						parent.window.location.reload();
+			         	var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
+			         	parent.layer.close(index);
+					</script>";
+				}
+		} else {
+			$data = [
+					'redundance' => $text_amend,
+					// 'update_time' => $update_time
+				];
+			$amend = $this->disconfig_model->update_value($id_hidden,$data);
+			if($amend){
+				echo "<script>
+						alert('配置修改成功！请联系运维组进行审核！');
+						parent.window.location.reload();
+			         	var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
+			         	parent.layer.close(index);
+					</script>";
+				}
+			}
+		} else {
+			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+		}
+	}
+	public function add_view(){
+		$data = array();
+      	$this->_data['get_project_name'] = $this->disconfig_model->get_project_name();
+      	$this->_data['get_env'] = $this->disconfig_model->get_env();
+      	$this->_data['title'] = '新增APP';
+		$this->load->view('default/disconfig_add',$this->_data);
+	}
+	public function add(){
+		$this->form_validation->set_rules('pattern', 'pattern','required');
+		$this->form_validation->set_rules('project', 'project','required');
+		$this->form_validation->set_rules('env', 'env','required');
+		$this->form_validation->set_rules('version', 'version','required');
+		$this->form_validation->set_rules('version_custom', 'version_custom','required');
+		$this->form_validation->set_rules('filename', 'filename','required');
+		$this->form_validation->set_rules('text', 'text','required');
+		$pattern = $this->input->post('pattern');
+		$project = $this->input->post('project');
+		$env = $this->input->post('env');
+		$version = $this->input->post('version');
+		$version_custom = $this->input->post('version_custom');
+		$filename = $this->input->post('filename');
+		$text = $this->input->post('text');
+		if ($pattern == "uploadfile") {
+			if ($_FILES["inputfile"]["error"] > 0){
+			  	echo "Error: " . $_FILES["inputfile"]["error"]."<br />";//由文件上传导致的错误代码
+			}
+			else{
+				// echo "Upload: " . $_FILES["inputfile"]["name"] . "<br />";//上传文件名字
+				// echo "Type: " . $_FILES["inputfile"]["type"] . "<br />";//上传文件类型
+				// echo "Size: " . ($_FILES["inputfile"]["size"] / 1024) . " Kb<br />";//上传文件大小
+				// echo "Stored in: " . $_FILES["inputfile"]["tmp_name"];//存储在服务器的文件的临时副本的名称
+				$file = fopen($_FILES["inputfile"]["tmp_name"],"r") or exit("Unable to open file!");//Output a line of the file until the end is reached
+				while(!feof($file)){
+				    $line= fgets($file);
+				    @$file_value = $file_value.$line;
+				}
+				if ($version == "version_custom") {
+					$data = [
+						'app_id' => $project,
+						'env_id' => $env,
+						'version' => $version_custom,
+						'name' => $_FILES["inputfile"]["name"],
+						'value' => $file_value
+					];
+				}
+				else{
+					$data = [
+					    'app_id' => $project,
+					    'env_id' => $env,
+					    'version' => $version,
+					    'name' => $_FILES["inputfile"]["name"],
+						'value' => $file_value
+					];
+				}
+				$inputresult = $this->disconfig_model->insert_disconfig($data);
+				if ($inputresult) {
+					echo "<script>
+						alert('配置上传成功！');
+						parent.window.location.reload();
+		         		var index = parent.layer.getFrameIndex(add.name); //获取窗口索引
+		         		parent.layer.close(index);
+					  </script>";
+				}
+				fclose($file);
+			}
+		}
+		else if ($pattern == "inputtextarea") {
+			if ($version == "version_custom") {
+				$data = [
+				    'app_id' => $project,
+				    'env_id' => $env,
+				    'version' => $version_custom,
+				    'name' => $filename,
+				    'value' => $text
+				];
+			}
+			else{
+				$data = [
+				    'app_id' => $project,
+				    'env_id' => $env,
+				    'version' => $version,
+				    'name' => $filename,
+				    'value' => $text
+				];
+			}
+			$result = $this->disconfig_model->insert_disconfig($data);
+			if($result){
+				echo "<script>
+						alert('配置添加成功！');
+						parent.window.location.reload();
+		         		var index = parent.layer.getFrameIndex(add.name); //获取窗口索引
+		         		parent.layer.close(index);
+					  </script>";
+			}
+		}
+	}
+	// public function delete(){
+	// 	$username = $this->session->userdata('adminname');
+	// 	$pwd = $this->input->get('pwd', TRUE);
+	// 	$id = $this->input->get('id', TRUE);
+	// 	$conf_data = $this->disconfig_model->get_conf_data_by_id($id);
+	// 	$res = $this->disconfig_model->search_user_by_ldap($username,$pwd);
+	// 	if ($res) {
+	// 		$del = $this->disconfig_model->delete_disconf($id);
+	// 		if ($del) {
+	// 			echo $conf_data->name;
+	// 		}
+	// 		else{
+	// 			echo "error_del";
+	// 		}
+	// 	}
+	// 	else{
+	// 		echo "error_pwd";
+	// 	}
+		
+	// }
+	// public function copy(){
+	// 	$app = $this->input->get('app',TRUE);
+	// 	$env = $this->input->get('env',TRUE);
+	// 	$version = $this->input->get('version',TRUE);
+	// 	$disconfig_info = $this->disconfig_model->get_info_by_app_env_version($app,$env,$version);
+	// 	$res = 1;
+	// 	foreach ($disconfig_info as $value) {
+	// 		$data = [
+	// 			'name' => $value->name,
+	// 			'value' => $value->value,
+	// 			'app_id' => $value->app_id,
+	// 			'version' => $value->version."_copy",
+	// 			'env_id' => $value->env_id,
+	// 			'sensitive_status' => $value->sensitive_status
+	// 		];
+	// 		$result = $this->disconfig_model->insert_disconfig($data);
+	// 		if (!$result) {
+	// 			$res = 0;
+	// 		}
+	// 	}
+	// 	// $result = $this->disconfig_model->insert_disconfig_batch($data);
+	// 	if ($res == 1) {
+	// 		echo $version;
+	// 		// echo "<script>
+	// 		// 		location.href='".$_SERVER["HTTP_REFERER"]."';
+	// 		// 	</script>";
+	// 	}
+	// }
+	// public function change_version(){
+	// 	$this->form_validation->set_rules('app', 'app','required');
+	// 	$this->form_validation->set_rules('env', 'env','required');
+	// 	$this->form_validation->set_rules('version', 'version','required');
+	// 	$this->form_validation->set_rules('version_new', 'version_new','required');
+ //      	$app = $this->input->post('app');
+	// 	$env = $this->input->post('env');
+	// 	$version = $this->input->post('version');
+	// 	$version_new = $this->input->post('version_new');
+	// 	$disconfig_info = $this->disconfig_model->get_info_by_app_env_version($app,$env,$version);
+	// 	if ($this->form_validation->run() == FALSE)
+ //      	{
+ //      		$data = array();
+ //      		$this->_data['title'] = '修改配置版本';
+	// 		$this->load->view('default/disconf_ChangeVersion',$this->_data);
+ //      	}
+ //      	else{
+ //      		$res = $this->disconfig_model->get_version_by_appid_env($app,$env);
+ //      		$n = 1;
+ //      		foreach ($res as $value) {
+ //      			if ($value->version == $version_new && $version_new != $version) {
+ //      				$n = 0;
+ //      			}
+ //      		}
+ //      		if ($n == 1) {
+ //      			foreach ($disconfig_info as $value) {
+	//       			$data = [
+	//       				'version' => $version_new
+	//       			];
+	//       			$id = $value->config_id;
+	//       			$result = $this->disconfig_model->change_version($id,$data);
+ //      			}
+	//       		if ($result) {
+	// 			echo "<script>
+	// 					alert('版本修改成功！！');
+	// 					parent.window.location.reload();
+	// 		         	var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
+	// 		         	parent.layer.close(index);
+	// 					location.href='".$_SERVER["HTTP_REFERER"]."';
+	// 				</script>";
+	// 			}
+	// 			else{
+	// 				echo "<script>
+	// 					alert('版本修改失败，请重试！！');
+	// 					parent.window.location.reload();
+	// 		         	var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
+	// 		         	parent.layer.close(index);
+	// 					location.href='".$_SERVER["HTTP_REFERER"]."';
+	// 				</script>";
+	// 			}
+ //      		}
+ //      		else if ($n == 0) {
+ //      			echo "<script>
+	// 					alert('版本重复，请重试！！');
+	// 					parent.window.location.reload();
+	// 		         	var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
+	// 		         	parent.layer.close(index);
+	// 					location.href='".$_SERVER["HTTP_REFERER"]."';
+	// 				</script>";
+ //      		}
+ //      	}
+	// }
+	// public function ajax_switch(){
+	// 	$id = $this->input->get('id', TRUE);
+	// 	$conf_data = $this->disconfig_model->get_conf_data_by_id($id);
+	// 	echo $conf_data->sensitive_status;
+	// }
+	// public function status_switch(){
+	// 	$id = $this->input->get('id', TRUE);
+	// 	$status = $this->disconfig_model->get_conf_data_by_id($id)->sensitive_status;
+	// 	if ($status == 0) {
+	// 		$data = [
+	// 			'sensitive_status' => 1
+	// 		];
+	// 	}
+	// 	else if($status == 1) {
+	// 		$data = [
+	// 			'sensitive_status' => 0
+	// 		];
+	// 	}
+	// 	$result = $this->disconfig_model->update_value($id,$data);
+	// 	$status_now = $this->disconfig_model->get_conf_data_by_id($id)->sensitive_status;
+	// 	if ($result) {
+	// 		echo $status_now;
+	// 		exit();
+	// 	}
+	// 	else{
+	// 		echo "updete_error";
+	// 	}
+	// }
+	public function test(){
+		$email = $this->disconfig_model->mac();
+		foreach ($email as $value) {
+			// $ops = $this->disconfig_model->Email_to_user($value->email,$value->name);
+			// if ($ops) {
+			// 	echo $value->email."发送成功</br>";
+			// }
+			echo $value->name." : ".$value->email."</br>";
+		}
+	}
+}
