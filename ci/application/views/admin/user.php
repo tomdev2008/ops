@@ -52,6 +52,7 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>姓名</th>
+                                                <th>组别</th>
                                                 <th>邮箱</th>
                                                 <th>手机</th>
                                                 <th>IP</th>
@@ -75,11 +76,16 @@
                                                         echo "<strong>".$user->name."</strong>";
                                                     }
                                                 ?></td>
+                                                <td>
+                                                    <span class="label label-success">
+                                                        <?php echo $this->user_model->get_LevelName_by_LevelId($user->level_id);?>
+                                                    </span>
+                                                </td>
                                                 <?php if ($user->email_exist == 1) {?>
                                                     <td><a href="mailto:<?php echo $user->email?>"><?php echo $user->email?></a></td>
                                                 <?php }else if($user->email_exist == 0) {?>
                                                     <td>
-                                                        <?php echo $user->email?><a href="javascript:;" onclick="add_email('/admin/user/add_email?id=<?php echo $user->id?>')"><button type="button" class="btn btn-xs btn-success"><i class="glyphicon glyphicon-pencil"></i>审核通过</button></a>
+                                                        <?php echo $user->email?><a href="javascript:;" onclick="add_email('/admin/user/add_email?id=<?php echo $user->id?>')"><button type="button" class="btn btn-xs btn-warning"><i class="glyphicon glyphicon-pencil"></i>开通邮箱</button></a>
                                                     </td>
                                                 <?php } ?>
                                                 <td><?php echo $user->tel?></td>
@@ -114,7 +120,6 @@
                                 <?php
                                     $number = 0;
                                     if ($level_id == null) {
-                                        
                                         foreach( $users_all as $user) {
                                 ?>
                                             <tr class="odd gradeX">
@@ -127,6 +132,7 @@
                                                         echo "<strong>".$user->name."</strong>";
                                                     }
                                                 ?></td>
+                                                <td><span class="label label-success"><?php echo $this->user_model->get_LevelName_by_LevelId($user->level_id);?></span></td>
                                                 <?php if ($user->email_exist == 1) {?>
                                                     <td><a href="mailto:<?php echo $user->email?>"><?php echo $user->email?></a></td>
                                                 <?php }else if($user->email_exist == 0) {?>
@@ -172,7 +178,7 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>姓名</th>                                                  
+                                                <th>姓名</th>                                                 
                                                 <th>邮箱</th>
                                                 <th>手机</th>
                                                 <th>离职部门</th>                                               
@@ -186,7 +192,13 @@
                                             <tr class="odd gradeX">
                                                 <td><?php echo $n = $n+1;?></td>
                                                 <td><?php echo $user->name?></td>
-                                                <td><strike><?php echo $user->email?></strike></td>
+                                                <td>
+                                                <?php if ($user->email_exist == 0){?>
+                                                    <strike><?php echo $user->email?></strike>
+                                                <?php }else{ ?>
+                                                    <?php echo $user->email?><a href="javascript:;" onclick="email_disable('<?php echo $user->email?>')"><button type="button" class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-pencil"></i>邮箱禁用</button></a>
+                                                <?php } ?>
+                                                </td>
                                                 <td><?php echo $user->tel?></td>
                                                 <td><?php echo $this->user_model->get_LevelName_by_LevelId($user->level_id)?></td>
                                             </tr>
@@ -203,6 +215,7 @@
                 </div>
             </div>
         </div>
+        <!-- JS -->
         <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/jquery-2.0.3.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/twitter-bootstrap-hover-dropdown.min.js"></script>
@@ -222,6 +235,7 @@
                   content: url
                 });
         }
+        // layer弹出层（修改个人信息）
         function get_user_change(url) {
             layer.open({
                   id: 'ex1',
@@ -233,6 +247,7 @@
                   content: url
                 });
         }
+        // layer弹出层（添加邮箱）
         function add_email(url) {
             layer.open({
                   title:false,
@@ -243,6 +258,7 @@
                   content: url
                 });
         }
+        // 删除人员账号信息
          function get_user_delete(user_id) {
             layer.prompt({
                 title :'请输入删除密码',
@@ -250,7 +266,7 @@
             },function(val){
                 $.ajax({
                     type: "GET",
-                    url:"/admin/user/delete?user_id="+user_id+"&pwd="+val,//我要执行删除的url地址
+                    url:"/admin/user/delete?user_id="+user_id+"&pwd="+val,//要执行删除的url地址
                     success: function (data) {
                          if (data == "error_pwd") {
                             layer.msg('密码错误，请重试！', {time: 3000,icon: 1});
@@ -259,16 +275,34 @@
                          }else if (data == "error_ldap_del") {
                             layer.msg('ldap删除信息失败！', {time: 3000,icon: 1});
                          }else{
-                            layer.msg(data+'的信息删除成功', {time: 3000,icon: 1}, function(){
+                            layer.msg(data+'的信息删除成功！', {time: 3000,icon: 1}, function(){
                                 parent.window.location.reload();
                             });
                         }
                     },
                     error: function () {
-                         layer.msg('程序内部错误', {time: 3000,icon: 1});
+                         layer.msg('程序内部错误！', {time: 3000,icon: 1});
                     }
                 })
             });
+        }
+        // 用户邮箱禁用
+        function email_disable(email) {
+            $.ajax({
+                url:"/admin/user/email_disable?email=" + email,//邮箱禁用接口
+                success:function(data){
+                    if (data == "success") {
+                        layer.msg('邮箱已禁用！', {time: 3000,icon: 1});
+                    }else{
+                        layer.msg('禁用失败请检查！', {time: 3000,icon: 1}, function(){
+                                parent.window.location.reload();
+                            });
+                    }
+                },
+                error: function() {
+                    layer.msg('程序内部错误！', {time: 3000,icon: 1});
+                }
+            })
         }
         //  function get_user_delete(user_id) {
         //     layer.confirm('您确定要删除该员工信息吗？', {

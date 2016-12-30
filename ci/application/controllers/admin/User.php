@@ -76,12 +76,6 @@ class User extends Admin_Controller {
 	}	
 	public function delete()
 	{
-		// 企业邮箱的管理员ID
-		$cTMailID = $this->config->item('ops_email_id');
-		// 接口Key
-		$cTMailSecret = $this->config->item('ops_email_key');
-		// 获取OAuth验证授权
-		$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
 		$user_id = $this->input->get('user_id', TRUE);
 		$adminname = $this->session->userdata('adminname');
 		$admin_id = $this->session->userdata('admin_id');
@@ -96,8 +90,6 @@ class User extends Admin_Controller {
 				$search =$this->user_model->search_user_by_uid($email);//查询ldap
 				if ($search) {
 					$ldap_del = $this->user_model->ldap_del($email);//删除ldap
-					$opentype = '2';//状态（0不设置状态；1启用账号；2禁用账号）
-					$this->user_model->email_disable($access_token,$email,$opentype);// 邮箱禁用
 					if ($ldap_del) {
 						$this->user_model->insert_user_login_logs($admin_id);//添加记录操作日志
 						echo $name;//删除操作成功，输出姓名
@@ -113,6 +105,32 @@ class User extends Admin_Controller {
 		}
 		else{
 			echo "error_pwd";//密码错误
+		}
+	}
+	// 邮箱禁用接口
+	public function email_disable()
+	{
+		$adminname = $this->session->userdata('adminname');
+		$admin_id = $this->session->userdata('admin_id');
+		$email = $this->input->get("email");
+		// 企业邮箱的管理员ID
+		$cTMailID = $this->config->item('ops_email_id');
+		// 接口Key
+		$cTMailSecret = $this->config->item('ops_email_key');
+		// 获取OAuth验证授权
+		$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
+
+		$opentype = '2';//状态（0不设置状态；1启用账号；2禁用账号）
+		$res = $this->user_model->email_disable($access_token,$email,$opentype);// 邮箱禁用
+		if ($res == "") {
+			$this->user_model->insert_email_dislogs($admin_id);//添加邮箱禁用操作日志
+			$result = $this->user_model->update_email_disabled($email);// 修改成员邮箱状态
+			if ($result) {
+				echo "success";
+			}
+		}
+		else{
+			echo $res['error'];
 		}
 	}
 	public function logs()
@@ -180,11 +198,16 @@ class User extends Admin_Controller {
 			$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
 
 			$result = $this->user_model->add_email($access_token,$cTMailAlias,$name,$password,$partypath);
+			$errors = [
+				'user_existed' => '账号已存在！',
+				'pwd_invalid' => '密码不符合安全设定！',
+				'party_not_found' => '邮箱组别不存在！'
+			];
 			if ($result == NULL) {
 				$error = [
-					'user_existed' => '邮箱开通成功，该群组中已存在该成员！',
-					'user_not_found' => '邮箱开通成功，该成员不存在！',
-					'error unknown' => '邮箱开通成功，群组不存在！'
+					'user_existed' => '邮箱开通失败，该群组中已存在该成员！',
+					'user_not_found' => '邮箱开通失败，该成员不存在！',
+					'error unknown' => '邮箱开通失败，群组不存在！'
 				];
 				$this->user_model->update_email($id);
 				$res = $this->user_model->add_email_in_group($access_token,$group,$cTMailAlias);
@@ -206,25 +229,9 @@ class User extends Admin_Controller {
 				}
 				
 			}
-			else if($result['error'] == "user_existed"){
+			else{
 				echo "<script>
-						alert('账号已存在！');
-						parent.window.location.reload();
-				        var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
-				        parent.layer.close(index);
-					</script>";
-			}
-			else if($result['error'] == "pwd_invalid"){
-				echo "<script>
-						alert('密码不符合安全设定！');
-						parent.window.location.reload();
-				        var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
-				        parent.layer.close(index);
-					</script>";
-			}
-			else if ($result['error'] == "party_not_found") {
-				echo "<script>
-						alert('邮箱组别不存在！');
+						alert('".$errors[$result['error']]."');
 						parent.window.location.reload();
 				        var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
 				        parent.layer.close(index);
@@ -232,6 +239,7 @@ class User extends Admin_Controller {
 			}
 		}
 	}
+	// 验证码打印接口
 	public function captcha()
 	{
 	 	$this->cool_captcha->createImage();

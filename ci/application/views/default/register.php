@@ -69,7 +69,7 @@
           <strong>手机号<span class="required">*</span><br></strong>
           </label>
             <div class="controls">
-                      <input type="text" style="width:250px;height:30px" name="tel" id="tel" data-required="1" class="span2 m-wrap"/>
+                      <input class="span2 m-wrap" name="tel" id="tel" type="text" data-required="1" style="width:250px;height:30px"   />
               </div>
           </div>
           <div class="control-group">
@@ -96,18 +96,21 @@
         </div>
                      <!-- /validation -->
                 </div>
-  <script src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
-  <script src="<?php echo base_url();?>assets/scripts.js"></script>
-  <script src="<?php echo base_url();?>vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+  <!-- External CSS -->
   <link href="<?php echo base_url();?>bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link href="<?php echo base_url();?>bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
   <link href="<?php echo base_url();?>vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
   <link href="<?php echo base_url();?>assets/styles.css" rel="stylesheet" media="screen">
   <link href="<?php echo base_url();?>assets/DT_bootstrap.css" rel="stylesheet" media="screen">
   <link href="<?php echo base_url();?>bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" media="screen">
+  <!-- Javascript -->
+  <script src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
+  <script src="<?php echo base_url();?>assets/scripts.js"></script>
+  <script src="<?php echo base_url();?>vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   <script src="<?php echo base_url();?>bootstrap/js/bootstrap.min.js"></script>
   <script src="<?php echo base_url();?>vendors/jquery-1.9.1.js"></script>
   <script src="<?php echo base_url();?>layer/layer.js"></script>
+  
   <script type="text/javascript">
       // 验证码打印
       function changing(){

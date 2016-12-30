@@ -224,6 +224,24 @@ class User_model extends CI_Model {
 		$this->db->where('id', $u_id);
 		$this->db->update('ops_user', $data);
 	}
+	public function insert_email_dislogs($u_id) {//添加邮箱禁用操作日志
+		$query = $this->db->query("select * from ops_user where id='$u_id'");
+		$row = $query->row();
+		$data =[
+		    'email' => $row->email,
+		    'name' => $row->name,
+		    'login_ip' => $this->input->ip_address(),
+		    'operation' => "6"
+		];
+		$this->db->insert('ops_user_logs', $data);
+		//echo $this->db->set($data)->get_compiled_insert('ops_user_logs');
+
+		$data = [
+		    'user_ip'  => $this->input->ip_address()
+		];
+		$this->db->where('id', $u_id);
+		$this->db->update('ops_user', $data);
+	}
 	public function get_permission_by_id($id){
 		$query = $this->db->query("select * from ops_user_ssh_server where user_id =".$id);
 		$data = $query->result();
@@ -319,5 +337,16 @@ class User_model extends CI_Model {
 		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
+ 	}
+ 	// 修改成员邮箱状态
+ 	public function update_email_disabled($email)
+ 	{
+ 		$data = [
+			'email_exist' => 0
+		];
+		$id = $this->get_id_by_email($email);
+		$where = " id = ".$id;
+		$query = $this->db->update('ops_user',$data,$where);
+		return $query;
  	}
 }
