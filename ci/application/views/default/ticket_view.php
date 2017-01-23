@@ -77,8 +77,8 @@
                   </div>
               </div>
                 <div class="control-group"">
-                  <?php echo "<strong>工单内容 : </strong>"?>
-                  <?php echo $this->ticket_model->makeLinks($get_ticket_by_id['contents'])?>
+                  <?php echo "<strong>工单内容 : </strong><br>"?>
+                  <?php echo $this->ticket_model->ubbReplace($get_ticket_by_id['contents'])?>
               </div>    
               <div class="control-group">
                   <?php echo "<strong>工单处理情况 : </strong><br />"?>

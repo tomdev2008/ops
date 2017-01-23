@@ -23,15 +23,8 @@
 								<button class="close" data-dismiss="alert"></button>
 								Your form validation is successful!
 							</div>
-  							<div class="control-group">
-  								<label class="control-label">工单标题<span class="required">*</span></label>
-  								<div class="controls">
-                  <?php echo form_error('title', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
-  									<input type="text" name="title" data-required="1" class="span2 m-wrap"/>
-  								</div>
-  							</div>
                 <div class="control-group">
-                  <label class="control-label">工单所属组<span class="required">*</span></label>
+                  <label class="control-label">工单类型<span class="required">*</span></label>
                   <div class="controls">
                   <?php echo form_error('category', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
                     <select class="span6 m-wrap" name="category" style="width:25%">
@@ -51,11 +44,20 @@
                     </select>
                   </div>
                 </div>
+                <div class="control-group">
+                  <label class="control-label">工单标题<span class="required">*</span></label>
+                  <div class="controls">
+                  <?php echo form_error('title', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
+                    <input type="text" name="title" data-required="1" class="span2 m-wrap" style="width: 60%" />
+                  </div>
+                </div>
               <div class="control-group">
                 <label class="control-label" for="textarea2">工单内容</label>
                   <div class="controls">
                   <?php echo form_error('contents', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
-                   <textarea name="contents" class="input-xlarge textarea" placeholder="请输入 ..." " style="width:50%;height:200px"></textarea>
+                  <?php echo form_error('contents', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
+                  <p><a class="emotion" style="cursor:pointer;"><img id="meme" style="cursor:pointer;" src="<?php echo base_url();?>qqface/arclist/icon.jpg" border="0" width="24" height="24">表情</a></p>
+                   <textarea name="contents" id="contents" class="input-xlarge textarea" placeholder="请输入 ..." " style="width:60%;height:200px"></textarea>
                    <div>
                      <strong><font color = "red">重要敏感的数据及文件</font> 直接发邮件到<?php echo mailto('ops@xkeshi.com',"ops@xkeshi.com")?></strong>
                    </div>
@@ -83,6 +85,9 @@
         <!--/.fluid-container-->
     <script src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
     <script src="<?php echo base_url();?>bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>qqface/js/jquery.qqFace.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>qqface/js/jquery.browser.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>qqface/css/qqface.css">
     <script>
       function buttoncheck(){
         $('#btn').on('click',function(){
@@ -90,4 +95,10 @@
           return true;
         });
       }
+    $(function(){ 
+    $('.emotion').qqFace({ 
+        assign:'contents', //给输入框赋值 
+        path:'<?php echo base_url();?>qqface/arclist/'    //表情图片存放的路径 
+    }); 
+});
     </script>

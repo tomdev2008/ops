@@ -1,3 +1,4 @@
+  
   <head>
         <title>运维平台后端管理</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -22,6 +23,7 @@
     echo form_hidden('redirect', $redirect_hidden_value);
 ?>
                         <h1>运维平台后端登录</h1>
+
                         <div class="input-group" style="width:250px;margin-bottom:30px">
                             <input type="text" class="form-control" name="username">
                             <span class="input-group-addon">@xkeshi.com</span>

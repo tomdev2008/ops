@@ -25,7 +25,7 @@ class Project_model extends CI_Model {
 		return $data;
 	}
 	public function get_ServerName_by_ServerEnv($server_env,$platform_id){
-		$query = $this->db->query("select a.ip_alias,a.ip,count(b.server_deploy_port) as server_num from ops_ip as a left join ops_app_server as b on a.ip = b.server_deploy_ip where a.server_env ='".$server_env."' and a.type='Linux' and a.platform_id ='".$platform_id."' group by a.ip order by server_num limit 0,5");
+		$query = $this->db->query("select a.ip_alias,a.ip,count(b.server_deploy_port) as server_num from ops_ip as a left join ops_app_server as b on a.ip = b.server_deploy_ip where a.server_env ='".$server_env."' and a.type='Linux' and a.platform_id ='".$platform_id."' group by a.ip order by server_num limit 0,2");
 		$row = $query->result();
 		return $row;
 	}
@@ -85,16 +85,12 @@ class Project_model extends CI_Model {
 		switch($server_env){
 			case '1':
 			$env = "开发环境";
-			break;
 			case '2':
 			$env = "测试环境";
-			break;
 			case '3':
 			$env = "预发布环境";
-			break;
 			case '4':
 			$env = "生产环境";
-			break;
 		}
 		$message = "<strong>".$name."</strong> to 运维组：<br>
 		提交了新的子项目，请马上处理。
@@ -108,4 +104,45 @@ class Project_model extends CI_Model {
 		$this->email->message($message);
 		$this->email->send();
 	}
+	public function get_project_id_by_server_name($server_name){
+		$query = $this->db->query("select id from ops_app_server where server_name='".$server_name."'");
+		$row = $query->result();
+		return $row;
+	}
+	public function get_num_all_by_server_name($server_name){
+		$sum = 0;
+		$s = 0;
+		$ID = $this->get_project_id_by_server_name($server_name);
+		foreach ($ID as $key => $value)
+		{
+            $id = $value->id;
+            $s += 1;
+        }
+        $sum += $s;
+		return $sum;
+	}
+	public function get_alias_by_id($id) {
+		$this->db->select('server_deploy_ip');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$ip = $this->db->get()->row('server_deploy_ip');
+		$query = $this->db->query("select ip_alias from ops_ip WHERE ip ='".$ip."'");
+		$row = $query->row_array();
+		$data = '<span class="label label-info">'.$row['ip_alias'].'</span> '.$ip;
+		return $data;
+	}
+	public function get_server_deploy_port_by_id($id) {
+		$this->db->select('server_deploy_port');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_deploy_port');
+		return $data;
+	}	
+	public function get_server_type_by_id($id) {
+		$this->db->select('server_type');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_type');
+		return $data;
+	}	
 }

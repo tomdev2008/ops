@@ -5,13 +5,14 @@
                          <!-- block -->
                         <div class="block" >
                           <div class="navbar navbar-inner block-header">
-                                    <div class="muted pull-left">添加子项目【1】</div>
+                                    <div class="muted pull-left">添加子项目</div>
                                 </div>
                               <div class="block-content collapse in">
                                   <div class="span12">
 <?php
     $attributes = ['class' => 'form-horizontal', 'id' => 'form_sample_1','onsubmit' => 'return buttoncheck()'];
     echo form_open('admin/project/jenkins', $attributes);
+    $oo = $this->project_model->get_env_alias_by_env($server_env);
 ?>
 <input type="hidden" name="server_project2" value="<?php echo $server_project?>">
 <input type="hidden" name="server_env2" value="<?php echo $server_env; ?>">
@@ -22,7 +23,8 @@
         <label class="control-label">项目中文名称<span class="required">*</span></label>
           <div class="controls">
             <?php echo form_error('cn_alias_name', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>', '</div>'); ?>
-            <input type="text" style="width:321px;height:30px" name="cn_alias_name" data-required="1" class="span2 m-wrap"/>
+            <input type="text" style="width:321px;height:30px" name="cn_alias_name" data-required="1" class="span2 m-wrap"/>-
+            <input type="text" style="width:100px;height:30px" name="cn_alias_name2" readonly class="span2" value="<?php echo substr($oo, 0,6); ?>"/>
           </div>
       </div>
       <div class="control-group">

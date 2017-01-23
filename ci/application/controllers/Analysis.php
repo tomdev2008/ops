@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Analysis extends MY_Controller {
+class Analysis extends Public_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -16,7 +16,7 @@ class Analysis extends MY_Controller {
 		$data = $query->result();
 		$this->_data['analysis'] = $data;
 		$this->_data['title'] = 'NGINX日志列表';
-		$this->load->view('default/header');
+		$this->load->view('default/header',$this->_data_header);
 		$this->load->view('default/analysis',$this->_data);
 		$this->load->view('default/footer');
 	}

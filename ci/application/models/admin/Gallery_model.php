@@ -18,7 +18,11 @@ class Gallery_model extends CI_Model {
 		$row = $query->result();
 		return $row;
 	}
-	
+	public function get_gallery_list_by_id($id) {
+		$query = $this->db->query("select * from ops_gallery where id='".$id."'");
+		$row = $query->result();
+		return $row;
+	}	
 	public function insert_gallery($data) {
 		$this->db->insert('ops_gallery', $data);
 		$result = $this->db->insert_id();
@@ -31,12 +35,7 @@ class Gallery_model extends CI_Model {
 		$data = $query->result();
 		return $data;
 	}
-	public function get_user_list(){
-		$data = array();
-		$query = $this->db->query('select * from ops_user');
-		$data = $query->result();
-		return $data;
-	}
+
 	public function get_url_by_id($id) {
 		$this->db->select('gallery_url');
 		$this->db->from('ops_gallery');
@@ -58,18 +57,32 @@ class Gallery_model extends CI_Model {
 		$data = $this->db->get()->row('name');
 		return $data;
 	}	
-	public function get_user_id_by_id($id) {
-		$this->db->select('user_id');
+	public function get_user_name_by_id($id) {
+		$this->db->select('user_name');
 		$this->db->from('ops_gallery');
 		$this->db->where('id', $id);
-		$data = $this->db->get()->row('user_id');
+		$data = $this->db->get()->row('user_name');
 		return $data;
 	}	
-	public function get_id_by_name($name) {
+	public function get_gallery_name_by_platform_id($id) {
+		$this->db->select('gallery_name');
+		$this->db->from('ops_gallery_platform');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('gallery_name');
+		return $data;
+	}
+	public function get_platform_id_by_gallery_name($name) {
 		$this->db->select('id');
-		$this->db->from('ops_user');
-		$this->db->where('name', $name);
+		$this->db->from('ops_gallery_platform');
+		$this->db->where('gallery_name', $name);
 		$data = $this->db->get()->row('id');
 		return $data;
-	}	
+	}
+	public function get_platform_id_by_id($id) {
+		$this->db->select('gallery_platform_id');
+		$this->db->from('ops_gallery');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('gallery_platform_id');
+		return $data;
+	}
 }

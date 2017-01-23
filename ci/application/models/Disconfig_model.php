@@ -114,7 +114,7 @@ class Disconfig_model extends CI_Model {
 		return $data;
 	}
 	public function get_conf_data_by_id($id){
-		$this->db->select('name,value,redundance,app_id,sensitive_status');
+		$this->db->select('name,value,redundance,app_id,env_id,sensitive_status');
 		$this->db->from('ops_disconfig');
 		$this->db->where('config_id',$id);
 		$data = $this->db->get()->row();

@@ -49,8 +49,7 @@
         </label>
         <div style="height:60px">
         <button class="btn btn-large btn-primary" type="submit" style="margin-right:10px;">登录</button>
-        <!-- <button class="btn btn-large btn-info" onclick="register('http://<?php echo $_SERVER['HTTP_HOST']?>/login/reg')">Register</button> -->
-        <button class="btn btn-large btn-info" type="button" onclick="location.href='http://<?php echo $_SERVER['HTTP_HOST']?>/register'" style="margin-right:10px;">注册</button>
+        <!-- <button class="btn btn-large btn-info" type="button" onclick="location.href='http://<?php echo $_SERVER['HTTP_HOST']?>/register'" style="margin-right:10px;">注册</button> -->
          <a class="btn btn-success btn-large" title="运维文档" target='_blank' href="http://ops.xkeshi.so/faq/" >常用文档</a>
         </div>
       </form>

@@ -46,7 +46,7 @@
                                     <ul class="nav nav-tabs">
                                     <li>
                                     <!-- 下拉按钮 -->
-                                    <?php if($app != NULL && $env != NULL && $env != 3 && $env != 4){?>
+                                    <?php if($app != NULL && $env != NULL &&$env != 3 && $env != 4){?>
                                     <div class="btn-group">
                                         <button data-toggle="dropdown" class="btn btn-success dropdown-toggle" style="margin-right:20px">新增项目
                                             <span class="caret"></span>
@@ -83,7 +83,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>KEY</th>
-                                            <th>配置内容</th>
+                                            <th>线上配置</th>
                                             <th>修改时间</th>
                                             <th>操作</th>
                                         </tr>

@@ -91,7 +91,7 @@
                                 ?>        
                                             <tr class="odd gradeX">
                                             <td style="text-align: left; vertical-align: middle;" rowspan="<?php echo $sum?>"><?php echo $num=$num+1?></td>
-                                                <td style="text-align: left; vertical-align: middle;" rowspan="<?php echo $sum?>"><a href="http://jenkins.ops.xkeshi.so/job/<?php echo $value->server_name?>" target="_blank"><?php echo $value->server_name?></a>&nbsp;<a href="javascript:;" class="runcode" onclick="get_jenkins_change('/admin/container/jenkins?id=<?php echo $value->id?>')"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a>&nbsp;<a href="javascript:;" class="runcode" onclick="get_domain_change('/admin/container/domain?id=<?php echo $value->id?>')"><button type="button" class="btn btn-xs btn-success">域名</button></a>&nbsp;<a href="javascript:;" class="runcode" onclick="window.open('http://ops.xkeshi.so/api/jenkins/server?server_name=<?php echo $value->server_name?>&pretty=true','_blank')"><button type="button" class="btn btn-xs btn-warning">API</button></a></td>
+                                                <td style="text-align: left; vertical-align: middle;" rowspan="<?php echo $sum?>"><a href="javascript:;" class="runcode" onclick="get_jenkins_change('/admin/container/jenkins?id=<?php echo $value->id?>')"><?php echo $value->server_name?></a>&nbsp;<a href="http://jenkins.ops.xkeshi.so/job/<?php echo $value->server_name?>" target="_blank"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a>&nbsp;<a href="javascript:;" class="runcode" onclick="get_domain_change('/admin/container/domain?id=<?php echo $value->id?>')"><button type="button" class="btn btn-xs btn-success">域名</button></a>&nbsp;<a href="javascript:;" class="runcode" onclick="window.open('http://ops.xkeshi.so/api/jenkins/server?server_name=<?php echo $value->server_name?>&pretty=true','_blank')"><button type="button" class="btn btn-xs btn-warning">API</button></a>&nbsp;<a href="javascript:;" class="runcode" onclick="add_jenkins('/admin/project/jenkins_copy?server_name=<?php echo $value->server_name?>')"><button type="button" class="btn btn-xs btn-default">复制</button></a></td>
                             <?php
                                     $ID = $this->project_model->get_project_id_by_server_name($value->server_name);
                                     foreach ($ID as $key => $value2)
@@ -140,7 +140,7 @@
                   title:false,
                   type: 2,
                   skin: 'layui-layer-demo', //样式类名
-                  area: ['650px', '450px'],
+                  area: ['650px', '600px'],
                   content: url
                 });
         }

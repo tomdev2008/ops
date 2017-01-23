@@ -251,7 +251,19 @@ class Project_model extends CI_Model {
 		return $env_name;
 	}
 	public function get_ServerName_by_ServerEnv($server_env,$platform_id){
-		$query = $this->db->query("select a.ip_alias,a.ip,count(b.server_deploy_port) as server_num from ops_ip as a left join ops_app_server as b on a.ip = b.server_deploy_ip where a.server_env ='".$server_env."' and a.type='Linux' and a.platform_id ='".$platform_id."' group by a.ip order by server_num limit 0,2");
+		$query = $this->db->query("select a.ip_alias,a.ip,count(b.server_deploy_port) as server_num from ops_ip as a left join ops_app_server as b on a.ip = b.server_deploy_ip where a.server_env ='".$server_env."' and a.type='Linux' and a.platform_id ='".$platform_id."' group by a.ip order by server_num limit 0,5");
+		$row = $query->result();
+		return $row;
+	}
+	public function get_former_ip($server_name){
+		$this->db->select('server_deploy_ip');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name',$server_name);
+		$data = $this->db->get()->row('server_deploy_ip');
+		return $data;
+	}
+	public function get_ServerName_by_ServerEnv_copy($server_env,$platform_id,$former_ip){
+		$query = $this->db->query("select a.ip_alias,a.ip,count(b.server_deploy_port) as server_num from ops_ip as a left join ops_app_server as b on a.ip = b.server_deploy_ip where a.server_env ='".$server_env."' and a.type='Linux' and a.platform_id ='".$platform_id."' and a.ip <> '".$former_ip."' group by a.ip order by server_num limit 0,5");
 		$row = $query->result();
 		return $row;
 	}
@@ -284,7 +296,7 @@ class Project_model extends CI_Model {
 		$result = $this->db->insert_id();
 		return $result;
 	}
-	public function Email_to_ops($name,$server_name,$cn_alias_name,$server_type,$server_env,$server_deploy_ip,$http_port){
+	public function Email_to_ops($name,$server_name,$cn_alias_name,$server_type,$server_env2,$server_deploy_ip,$http_port){
 		$this->load->library('email');
 		$config['protocol'] = 'smtp';
 		$config['smtp_host'] = 'ssl://smtp.exmail.qq.com';
@@ -316,26 +328,87 @@ class Project_model extends CI_Model {
 		网址：<a href=http://www.xkeshi.com>http://www.xkeshi.com</a>
 		</p>
 		";
-		switch($server_env){
-			case '1':
-			$env = "开发环境";
-			case '2':
-			$env = "测试环境";
-			case '3':
-			$env = "预发布环境";
-			case '4':
-			$env = "生产环境";
-		}
+		$env_alias = $this->get_env_alias_by_env($server_env2);
 		$message = "<strong>".$name."</strong> to 运维组：<br>
 		提交了新的子项目，请马上处理。
 		<br>项目Jenkins名称：<strong>".$server_name."</strong>
 		<br>项目中文名称：<strong>".$cn_alias_name."</strong>
-		<br>项目部署环境：<strong>".$env."</strong>
+		<br>项目部署环境：<strong>".$env_alias."</strong>
 		<br>项目容器：<strong>".$server_type."</strong>
 		<br>服务器：<strong>".$server_deploy_ip."</strong>
 		<br>端口:<strong>".$http_port."</strong>
 		<br>".$footer;
 		$this->email->message($message);
 		$this->email->send();
+	}
+	public function search_port_id($ServerName) {
+		$this->db->select('id');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name', $ServerName);
+		$data = $this->db->get()->row('id');
+		return $data;
+	}	
+	public function search_port($port_id) {
+		$this->db->select('server_deploy_port');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $port_id);
+		$data = $this->db->get()->row('server_deploy_port');
+		return $data;
+	}	
+	public function get_jenkins_list_by_ServerEnv($env,$server_project) {
+		$sql_where = " WHERE server_env = '".$env."' and server_project = '".$server_project."' group by server_name" ;
+		$query = $this->db->query("select * from ops_app_server".$sql_where);
+		$data = $query->result();
+		return $data;
+	}
+	public function get_jenkins_copy_by_server_name($server_name) {
+		$sql_where = " WHERE server_name = '".$server_name."' group by server_name" ;
+		$query = $this->db->query("select server_alias_name,server_type,server_env,server_project,server_deploy_port,server_deploy_path,server_bin_start,server_bin_stop,server_logs_path from ops_app_server".$sql_where);
+		$data = $query->result();
+		return $data;
+	}
+	/**
+	 * 对象 转 数组
+	 *
+	 * @param object $obj 对象
+	 * @return array
+	 */
+	function object_to_array($obj)
+	{
+	    $obj = (array)$obj;
+	    foreach ($obj as $k => $v)
+	    {
+	        if (gettype($v) == 'resource')
+	        {
+	            return;
+	        }
+	        if (gettype($v) == 'object' || gettype($v) == 'array')
+	        {
+	            $obj[$k] = (array)object_to_array($v);
+	        }
+	    }
+	 
+	    return $obj;
+	}
+	public function get_project_by_server_name($server_name){
+		$this->db->select('server_project');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name',$server_name);
+		$data = $this->db->get()->row('server_project');
+		return $data;
+	}
+	public function get_platform_by_project($server_project){
+		$this->db->select('platform_id');
+		$this->db->from('ops_project');
+		$this->db->where('id',$server_project);
+		$data = $this->db->get()->row('platform_id');
+		return $data;
+	}
+	public function get_env_by_server_name($server_name){
+		$this->db->select('server_env');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name',$server_name);
+		$data = $this->db->get()->row('server_env');
+		return $data;
 	}
 }

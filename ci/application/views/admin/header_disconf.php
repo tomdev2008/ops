@@ -109,29 +109,39 @@
                         // @$url_change = explode($app_env[0], $u);
                         // @$url_noversion = explode("&version=", $url_change[1]);
                         // echo $app;
+                        // 导航栏
+                        $env_val = [
+                            "1" => [
+                                "id" => "1",
+                                "name" => "开发环境",
+                                "select" => "",
+                            ],
+                            "2" => [
+                                "id" => "2",
+                                "name" => "测试环境",
+                                "select" => "",
+                            ],
+                            "3" => [
+                                "id" => "3",
+                                "name" => "预发布环境",
+                                "select" => "",
+                            ],
+                            "4" => [
+                                "id" => "4",
+                                "name" => "生产环境",
+                                "select" => "",
+                            ],
+                            // "5" => [
+                            //     "id" => "5",
+                            //     "name" => "本地环境",
+                            //     "select" => "",
+                            // ]
+                        ];
                         //导航栏active状态
-                        switch ($env) {
-                            case 1:
-                                $dev = "active";
-                                break;
-                            case 2:
-                                $test = "active";
-                                break;
-                            case 3:
-                                $prepub = "active";
-                                break;
-                            case 4:
-                                $online = "active";
-                                break;
-                            // case 5:
-                            //     $local = "active";
-                            //     break;
-                            // case 6:
-                            //     $autoprepub = "active";
-                            //     break;
-                            default:
-                                $disconf = "active";
-                                break;
+                        if ($env == 0) {
+                            $disconf = "active";
+                        }else{
+                            $env_val[$env]["select"] = "active";
                         }
                         // url调整
                         $url_dev =  $app_get != "" ? $app_name[0]."&app=dev".$app[1] : $app_name[0];
@@ -142,36 +152,13 @@
                         <li class="<?php echo $disconf?>">
                             <a href="<?php echo base_url();?>admin/disconfig"><i class="glyphicon glyphicon-chevron-right"></i>最新修改</a>
                         </li>
-                            <li class="<?php echo $dev?>">
-                                <a href="<?php echo $env != "" ? $url[0]."?env=1".$url_dev : $url[0]."?env=1"?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>开发环境
-                                </a>
-                            </li>
-                            <li class="<?php echo $test?>">
-                                <a href="<?php echo $env != "" ? $url[0]."?env=2".$url_test : $url[0]."?env=2"?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>测试环境
-                                </a>
-                            </li>
-                            <li class="<?php echo $prepub?>">
-                                <a href="<?php echo $env != "" ? $url[0]."?env=3".$url_pre : $url[0]."?env=3"?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>预发布环境
-                                </a>
-                            </li>
-                            <li class="<?php echo $online?>">
-                                <a href="<?php echo $env != "" ? $url[0]."?env=4".$url_product : $url[0]."?env=4"?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>生产环境
-                                </a>
-                            </li>
-                            <!-- <li class="<?php echo $local?>">
-                                <a href="<?php echo $url[0]."?env=5".$url_add?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>local环境
-                                </a>
-                            </li>
-                            <li class="<?php echo $autoprepub?>">
-                                <a href="<?php echo $url[0]."?env=6".$url_add?>">
-                                    <i class="glyphicon glyphicon-chevron-right"></i>autoprepub环境
-                                </a>
-                            </li> -->
+                            <?php foreach ($env_val as $key => $value) {?>
+                                <li class="<?php echo $value["select"];?>">
+                                    <a href="<?php echo $env != "" ? $url[0]."?env=".$value["id"].$url_dev : $url[0]."?env=".$value["id"]?>">
+                                        <i class="glyphicon glyphicon-chevron-right"></i><?php echo $value["name"];?>
+                                    </a>
+                                </li>
+                            <?php }?>
                     </ul>
                 </div>
     

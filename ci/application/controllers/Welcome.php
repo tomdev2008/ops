@@ -37,7 +37,7 @@ class Welcome extends Public_Controller {
 			$data_gallery = $query->result();
 
 			foreach ($data_gallery as $key => $value_user) {
-				$query_user = $this->db->query("select * from ops_user where id='$value_user->user_id'");
+				@$query_user = $this->db->query("select * from ops_user where id='$value_user->user_id'");
 				$data_user =  $query_user->row_array();
 				$data_gallery[$key]->username = $data_user['name'];
 			}

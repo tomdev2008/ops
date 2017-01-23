@@ -17,7 +17,7 @@
 		</div>
 			<div style="margin-left:5%;">
 			<?php if ($sensitive_id == 0) { ?>
-				<textarea class="lined" rows="25" cols="80" style="width:95%;height:80%;" readonly><?php if ($conf_data->redundance == NULL){echo $conf_data->value;}else {echo $conf_data->redundance;}?></textarea>
+				<textarea class="lined" rows="25" cols="80" style="width:95%;height:80%;" readonly><?php echo $conf_data->value;?></textarea>
 				<?php
 			} else {
 				echo '对不起，该配置文件属于敏感信息，如须修改，请联系运维组进行修改！';

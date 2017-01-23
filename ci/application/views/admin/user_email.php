@@ -63,6 +63,12 @@
                     <input type="text" style="width:220px;height:30px" id="password" name="password" value="<?php echo $password;?>" readonly />
             </div>
         </div>
+        <div class="control-group">
+          <label class="control-label"><strong>手机号码</strong><span class="required">*</span></label>
+              <div class="controls">
+                  <input type="text" style="width:220px;height:30px" id="tel" name="tel" value="<?php echo $tel;?>" />
+              </div>
+        </div>
          <!--  <div class="control-group">
             <label class="control-label">
               <strong>验证码<span class="required">*</span><br>( 英文 )</strong>

@@ -195,7 +195,7 @@ class User_model extends CI_Model {
 		    'email' => $row->email,
 		    'name' => $row->name,
 		    'login_ip' => $this->input->ip_address(),
-		    'operation' => "3"
+		    'operation' => "2"
 		];
 		$this->db->insert('ops_user_logs', $data);
 		//echo $this->db->set($data)->get_compiled_insert('ops_user_logs');
@@ -262,13 +262,14 @@ class User_model extends CI_Model {
 		return $data;
 	}
 	// 添加新成员邮箱(已测试)
- 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$password,$partypath)
+ 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$tel,$password,$partypath)
  	{
  		// post地址
  		$cTMailContentData = [
 			'access_token' => $cTMailAccessToken,
 			'action' => 2,//添加为2
 			'alias' => $cTMailAlias,
+			'tel' => $tel,
 			'name' => $name,
 			'password' => $password,
 			'partypath' => $partypath
@@ -349,4 +350,30 @@ class User_model extends CI_Model {
 		$query = $this->db->update('ops_user',$data,$where);
 		return $query;
  	}
+ 	// 开启强制启用微信动态密码
+ 	public function open_wxtoken($cTMailAccessToken,$cTMailAlias)
+ 	{
+ 		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'alias' => $cTMailAlias,
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'user/openwxtoken',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+ 	}
+ 	public function insert_dba_data($data) {
+		$this->db->set('opr_time', 'NOW()', false);
+		$this->db->insert('ops_user_ssh_server', $data);
+		$result = $this->db->insert_id();
+		return $result;
+	}
+	public function get_dba_permission_by_id($id){
+		$this->db->select('opr_time');
+		$this->db->from('ops_user_ssh_server');
+		$this->db->where('id', $id);
+		$this->db->where('ssh_user', 'dba');
+		$data = $this->db->get()->row('opr_time');
+		return $data;
+	}
 }

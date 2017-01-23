@@ -274,7 +274,7 @@
                             layer.msg('查询ldap失败！', {time: 3000,icon: 1});
                          }else if (data == "error_ldap_del") {
                             layer.msg('ldap删除信息失败！', {time: 3000,icon: 1});
-                         }else{
+                         }else{l
                             layer.msg(data+'的信息删除成功！', {time: 3000,icon: 1}, function(){
                                 parent.window.location.reload();
                             });
@@ -293,6 +293,7 @@
                 success:function(data){
                     if (data == "success") {
                         layer.msg('邮箱已禁用！', {time: 3000,icon: 1});
+                        parent.window.location.reload();
                     }else{
                         layer.msg('禁用失败请检查！', {time: 3000,icon: 1}, function(){
                                 parent.window.location.reload();
@@ -301,6 +302,7 @@
                 },
                 error: function() {
                     layer.msg('程序内部错误！', {time: 3000,icon: 1});
+                    parent.window.location.reload();
                 }
             })
         }

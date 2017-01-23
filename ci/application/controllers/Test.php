@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Test extends Public_Controller {
 	public function __construct() {
 		parent::__construct();
-
 		$this->load->library(array('session', 'form_validation','email','PHPRequests'));
 		$this->load->helper(array('form', 'url', 'cookie','url_helper','typography'));
 		$this->load->model('email_model');
@@ -20,6 +19,11 @@ class Test extends Public_Controller {
 		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		//$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		print_r($this->email_model->get_account_info($access_token,$cTMailAlias));
+	}
+	// 测试接口
+	public function etcd_test()
+	{
+		print_r($this->email_model->etcd_test());
 	}
 	// 邮箱添加 接口
 	public function add_email()
@@ -80,15 +84,15 @@ class Test extends Public_Controller {
 		// 获取OAuth验证授权
 		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		// 需要修改的账号信息
-		$cTMailAlias = 'jh@xkeshi.so';//邮箱名（不可改，但可以申请别名）
-		//$name = '姜杭';//姓名
+		$cTMailAlias = 'xb@xkeshi.so';//邮箱名（不可改，但可以申请别名）
+		//$name = '倪夏冰';//姓名
 		//$gender = '1';//性别（男1,女2）
 		//$mobile = '12300000000';//手机号
-		//$password = 'Ni123456';//密码（有设定）
-		//$partypath = 'IT部/运维部';//部门（必须存在）
-		//$position = '网管';//职务
-		$opentype = '2';//状态（0不设置状态；1启用账号；2禁用账号）
-		$result = $this->email_model->mod_email($access_token,$cTMailAlias,$opentype);
+		$password = 'Ni6688';//密码（有密码匹配规则）
+		//$partypath = 'IT部/运维部';//部门
+		//$ = '网管';//职务
+		//$opentype = '0';//状态（0不设置状态；1启用账号；2禁用账号）
+		$result = $this->email_model->mod_email($access_token,$cTMailAlias,$password);
 		if ($result == NULL) {
 			echo "修改成功";
 		}
@@ -173,6 +177,30 @@ class Test extends Public_Controller {
 	// 	print_r($result);
 	// }
 
+	// 获得子部门列表
+	public function get_party()
+	{
+		// 企业邮箱的管理员ID
+		$cTMailID = $this->config->item('ops_email_id');
+		// 接口Key
+		$cTMailSecret = $this->config->item('ops_email_key');
+		// 获取OAuth验证授权
+		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
+		$partypath = "IT部";
+		print_r($this->email_model->get_party($access_token,$partypath));
+	}
+	// 获得部门成员信息
+	public function get_PartyUser()
+	{
+		// 企业邮箱的管理员ID
+		$cTMailID = $this->config->item('ops_email_id');
+		// 接口Key
+		$cTMailSecret = $this->config->item('ops_email_key');
+		// 获取OAuth验证授权
+		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
+		$partypath = "IT部";
+		print_r($this->email_model->get_PartyUser($access_token,$partypath));
+	}
 	// 添加群组
 	public function add_group()
 	{

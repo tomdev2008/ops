@@ -103,7 +103,7 @@ $autoload['helper'] = array('url', 'ez_sql_core');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('ops');
+$autoload['config'] = array('ops','sql_database');
 
 /*
 | -------------------------------------------------------------------

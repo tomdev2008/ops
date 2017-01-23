@@ -64,7 +64,15 @@ class User extends Admin_Controller {
         	$tel = $this->input->post('tel', TRUE);
         	$qq = $this->input->post('qq', TRUE);    	
         	$group_leader = $this->input->post('group_leader',TRUE);
-			$result = $this->db->query("UPDATE ops_user SET qq = ".$qq.",level_id = ".$level_id.",group_leader = ".$group_leader." ,tel = ".$tel." WHERE id = '".$user_id."'");
+			//$result = $this->db->query("UPDATE ops_user SET qq = ".$qq.",level_id = ".$level_id.",group_leader = ".$group_leader." ,tel = ".$tel." WHERE id = '".$user_id."'");
+			$data = [
+        		'level_id' => $this->input->post('level_id', TRUE),
+        		'tel' => $this->input->post('tel', TRUE),
+        		'qq' => $this->input->post('qq', TRUE),  	
+        		'group_leader' => $this->input->post('group_leader',TRUE)
+				];
+			$this->db->where('id', $user_id);
+			$result = $this->db->update('ops_user', $data);
 				if ($result) {
 					echo "<script>
 					parent.window.location.reload();
@@ -157,7 +165,10 @@ class User extends Admin_Controller {
 	{
 		$id = $this->input->get('id');
 		$permission = $this->user_model->get_permission_by_id($id);
+		$dba_permission = $this->user_model->get_dba_permission_by_id($id);
+		$this->_data['id'] = $id;
 		$this->_data['permission'] = $permission;	
+		$this->_data['dba_permission'] = $dba_permission;
 		$this->load->view('admin/user_permission',$this->_data);
 	}
 	// 添加邮箱
@@ -169,6 +180,7 @@ class User extends Admin_Controller {
 		@$this->_data['level_id'] =  $user_info[0]->level_id;//组别
 		@$this->_data['email'] = $user_info[0]->email;//邮箱号（必填）
 		@$this->_data['name'] =  $user_info[0]->name;//姓名（必填）
+		@$this->_data['tel'] =  $user_info[0]->tel;//手机号（密码重置验证）
 		$this->_data['group'] =  $this->user_model->get_EmailGroup();//邮箱组别（必填）
 		$this->_data['password'] = 'Abc110';//初始密码（必填）
 		$this->_data['partypath'] = 'IT部';//部门（必填）
@@ -186,6 +198,7 @@ class User extends Admin_Controller {
 			$id = $this->input->post('id');
 			$partypath = $this->input->post('partypath');	
         	$name = $this->input->post('name');
+        	$tel = $this->input->post('tel');
         	$password = $this->input->post('password');
         	$cTMailAlias = $this->input->post('email')."@".$this->input->post('domain');
         	$group = $this->input->post('group');
@@ -197,7 +210,7 @@ class User extends Admin_Controller {
 			// 获取OAuth验证授权
 			$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
 
-			$result = $this->user_model->add_email($access_token,$cTMailAlias,$name,$password,$partypath);
+			$result = $this->user_model->add_email($access_token,$cTMailAlias,$name,$tel,$password,$partypath);
 			$errors = [
 				'user_existed' => '账号已存在！',
 				'pwd_invalid' => '密码不符合安全设定！',
@@ -210,6 +223,7 @@ class User extends Admin_Controller {
 					'error unknown' => '邮箱开通失败，群组不存在！'
 				];
 				$this->user_model->update_email($id);
+				$this->user_model->open_wxtoken($access_token,$cTMailAlias);
 				$res = $this->user_model->add_email_in_group($access_token,$group,$cTMailAlias);
 				if ($res == NULL) {
 					$this->user_model->insert_email_check_logs($admin_id);//添加记录操作日志
@@ -231,12 +245,23 @@ class User extends Admin_Controller {
 			}
 			else{
 				echo "<script>
-						alert('".$errors[$result['error']]."');
+						alert('".$errors[$result['errors']]."');
 						parent.window.location.reload();
 				        var index = parent.layer.getFrameIndex(update.name); //获取窗口索引
 				        parent.layer.close(index);
 					</script>";
 			}
+		}
+	}
+	public function add_dba()
+	{
+		$user_id = $this->input->get('user_id', TRUE);
+		$res = $this->user_model->search_user_by_ldap($adminname,$pwd);
+		if ($res) {
+		
+		}
+		else{
+			echo "放弃添加";//密码错误
 		}
 	}
 	// 验证码打印接口

@@ -118,20 +118,32 @@ class Email_model extends CI_Model {
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
  	}
+ 	public function etcd_test()
+ 	{
+ 		$options = array(
+			'auth' => array('tracker', 'Jsbjtf9K'),
+			//'data' => array('message','jjjj'),
+		);
+		$data =  array('value' => 'ok');
+		//$headers = array('Content-Type' => 'application/json');
+		$response = Requests::put('http://192.168.184.100:2379/v2/keys/dev-backend-new-framework-promotion',array(),$data,$options);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+ 	}
  	// 修改成员邮箱信息（已测试）
- 	public function mod_email($cTMailAccessToken,$cTMailAlias,$name,$gender,$position,$mobile,$password,$partypath,$opentype)
+ 	public function mod_email($cTMailAccessToken,$cTMailAlias,$password)
  	{ 		
  		$cTMailContentData = [
 			'access_token' => $cTMailAccessToken,
 			'action' => 3,//修改为3
 			'alias' => $cTMailAlias,
-			'name' => $name,
-			'gender' => $gender,
-			'position' => $position,
-			'mobile' => $mobile,
+			//'name' => $name,
+			//'gender' => $gender,
+			//'position' => $position,
+			//'mobile' => $mobile,
 			'password' => $password,
-			'partypath' => $partypath,
-			'opentype' => $opentype
+			//'partypath' => $partypath,
+			//'opentype' => $opentype
 		];
 		$headers = array('Content-Type' => 'application/json');
 		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
@@ -295,6 +307,30 @@ class Email_model extends CI_Model {
 		$response = Requests::post($this->api_address.'group/add',$headers,$cTMailContentData);
 		$json_obj = json_decode($response->body,true);
 		var_dump($response->headers);
+		return $json_obj;
+	}
+	// 获得子部门列表
+	public function get_party($cTMailAccessToken,$partypath)
+	{
+		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'partypath' => $partypath
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'party/list',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+	}
+	// 获得子部门成员信息
+	public function get_PartyUser($cTMailAccessToken,$partypath)
+	{
+		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'partypath' => $partypath
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'partyuser/list',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
 		return $json_obj;
 	}
 }

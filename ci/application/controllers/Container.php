@@ -17,12 +17,10 @@ class Container extends Public_Controller {
 		if ($pid_id == NULL) {
 			$query = $this->db->query('select * from ops_project');
 			$data_container = $query->result();
-			$flag = 0;
 		} else {
 			$sql = "SELECT * FROM ops_project WHERE id = ? ";
 			$query = $this->db->query($sql, array($pid_id));	
 			$data_container = $query->result();
-			$flag = 1;
 		}
 		foreach ($data_container as $key => $value) {
 			$ip_environment = [
@@ -51,7 +49,6 @@ class Container extends Public_Controller {
 			}
 		}
 		$this->_data['container'] = $data_container;
-		$this->_data['flag'] = $flag;
 		$this->_data['pid_id'] = $pid_id;
 		$this->load->view('default/header',$this->_data_header);
 		$this->load->view('default/container',$this->_data);

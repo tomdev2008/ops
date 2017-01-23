@@ -25,7 +25,7 @@
 		    	<h3>修改 <?php echo $conf_data->name?> 配置</h3>
 				<p style="color: red; font-weight: bold;">除开发、测试环境外，其余环境修改完成提交后请联系运维部进行审核！</p>
 				<?php if ($sensitive_id == 0) { ?>
-					<textarea class="text_update" rows="30" cols="70" name="text_amend"><?php if ($conf_data->redundance == NULL){echo $conf_data->value;}else {echo $conf_data->redundance;}?></textarea>
+					<textarea class="text_update" rows="30" cols="70" name="text_amend"><?php if ($conf_data->env_id == 1 || $conf_data->env_id == 2 ){echo $conf_data->value;}else {echo $conf_data->redundance;}?></textarea>
 					<script>
 					$(function() {
 						$(".text_update").linedtextarea(

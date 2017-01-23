@@ -146,9 +146,9 @@
                             <a href="/"><i class="icon-chevron-right"></i> 控制台</a>
                         </li>
                  <?php
-                 $this->load->database();
-                 $query = $this->db->query("select * from ops_col_permissions where class_id = 1 ");
-                 $col_name = $query->result();
+                 // $this->load->database();
+                 // $query = $this->db->query("select * from ops_col_permissions where class_id = 1 ");
+                 // $col_name = $query->result();
                  if ($col_name != '') {
                     foreach ($col_name as $key => $value) {
                  ?>       

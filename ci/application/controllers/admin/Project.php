@@ -187,11 +187,10 @@ class Project extends ADMIN_Controller {
 	//添加jenkins页面1
 	public function jenkins()
 	{
-		$user_id = $this->session->userdata('u_id');
+		$user_id = $this->session->userdata('admin_id');
 		$name = $this->project_model->get_name_by_id($user_id);
 		$this->form_validation->set_rules('cn_alias_name', 'cn_alias_name','required');
 		$this->form_validation->set_rules('ops_repo_url', 'ops_repo_url','required');
-		$this->form_validation->set_rules('ops_war_name', 'ops_war_name','required');
 		$this->form_validation->set_rules('server', 'server','required');
 		$this->form_validation->set_rules('http_port', 'http_port','required');
 		//从上一页面获取项目信息
@@ -217,7 +216,9 @@ class Project extends ADMIN_Controller {
 		}
 
 		//获取当前页面表单信息
-		$cn_alias_name = $this->input->post('cn_alias_name');
+		$cn_alias_name1 = $this->input->post('cn_alias_name');
+		$cn_alias_name2 = $this->input->post('cn_alias_name2');
+		$cn_alias_name = $cn_alias_name1.'-'.$cn_alias_name2;
 		$ops_docker_deploy = $this->input->post('ops_docker_deploy');
 		$ops_repo_type = $this->input->post('ops_repo_type');
 		$ops_repo_url = $this->input->post('ops_repo_url');
@@ -251,36 +252,54 @@ class Project extends ADMIN_Controller {
 				$server_bin_start = "";
 				$server_bin_stop = "";
 			}
-			$http_port = $this->input->post('http_port');
 			$dubbo_port = $this->input->post('dubbo_port');	
 			$server = $this->input->post('server');
-
-			$data1 = [
-				'server_env' => $server_env2,
-				'server_name' => $ServerName,
-				'server_alias_name' => $cn_alias_name,
-				'server_type' => $server_type,
-				'server_project' => $server_project2,
-				'server_deploy_path' => "/home/www/xkeshi/".$ServerName,
-				'server_logs_path' => "/home/".$server_type."_logs/".$ServerName,
-				'server_deploy_ip' => $server,
-				'server_bin_start' => $server_bin_start,
-				'server_bin_stop' => $server_bin_stop,
-				'server_deploy_port' => $http_port,
-				'server_status' => '2'
-			];
-			$result1 = $this->project_model->insert_app_server($data1);
-			$data2 = [
-				'ops_server_name' => $ServerName,
-				'ops_docker_deploy' => $ops_docker_deploy,
-				'ops_repo_type' => $ops_repo_type,
-				'ops_repo_url' => $ops_repo_url,
-				'ops_war_name' => $ops_war_name,
-				'ops_port' => $http_port,
-				'ops_dubbo_port' => $dubbo_port
-			];
-			$result2 = $this->project_model->insert_jenkins($data2);
-			
+			$port_id = $this->project_model->search_port_id($ServerName);
+			if ($port_id == NULL) {
+				$http_port = $this->input->post('http_port');
+				$data1 = [
+					'server_env' => $server_env2,
+					'server_name' => $ServerName,
+					'server_alias_name' => $cn_alias_name,
+					'server_type' => $server_type,
+					'server_project' => $server_project2,
+					'server_deploy_path' => "/home/www/xkeshi/".$ServerName,
+					'server_logs_path' => "/home/".$server_type."_logs/".$ServerName,
+					'server_deploy_ip' => $server,
+					'server_bin_start' => $server_bin_start,
+					'server_bin_stop' => $server_bin_stop,
+					'server_deploy_port' => $http_port,
+					'server_status' => '2'
+				];
+				$result1 = $this->project_model->insert_app_server($data1);
+				$data2 = [
+					'ops_server_name' => $ServerName,
+					'ops_docker_deploy' => $ops_docker_deploy,
+					'ops_repo_type' => $ops_repo_type,
+					'ops_repo_url' => $ops_repo_url,
+					'ops_war_name' => $ops_war_name,
+					'ops_port' => $http_port,
+					'ops_dubbo_port' => $dubbo_port
+				];
+				$result2 = $this->project_model->insert_jenkins($data2);           
+			} else {
+				$http_port = $this->project_model->search_port($port_id);
+				$data1 = [
+					'server_env' => $server_env2,
+					'server_name' => $ServerName,
+					'server_alias_name' => $cn_alias_name,
+					'server_type' => $server_type,
+					'server_project' => $server_project2,
+					'server_deploy_path' => "/home/www/xkeshi/".$ServerName,
+					'server_logs_path' => "/home/".$server_type."_logs/".$ServerName,
+					'server_deploy_ip' => $server,
+					'server_bin_start' => $server_bin_start,
+					'server_bin_stop' => $server_bin_stop,
+					'server_deploy_port' => $http_port,
+					'server_status' => '2'
+				];
+				$result2 = $this->project_model->insert_app_server($data1);
+			}              			
 			if ($result2) {
 				$this->project_model->Email_to_ops($name,$ServerName,$cn_alias_name,$server_type,$server_env2,$server,$http_port);
 				redirect('admin/project/show_result?server_env='.$server_env2.'&ServerName='.$ServerName.'&alias_name='.$cn_alias_name.'&server_type='.$server_type.'&server='.$server.'&port='.$http_port);
@@ -296,4 +315,46 @@ class Project extends ADMIN_Controller {
 		$this->load->view('admin/project_jenkins_show',$this->_data);
 		
 	 }
+
+	public function jenkins_copy()
+	{
+		$user_id = $this->session->userdata('admin_id');
+		$name = $this->project_model->get_name_by_id($user_id);
+		$this->form_validation->set_rules('server', 'server','required');
+	    $server_name = $this->input->get('server_name');
+	    $server_project = $this->project_model->get_project_by_server_name($server_name);
+		$platform_id = $this->project_model->get_platform_by_project($server_project);
+		$server_env = $this->project_model->get_env_by_server_name($server_name);
+		$server = $this->input->post('server');
+		$jenkins = $this->input->post('jenkins');
+
+		if ($this->form_validation->run() == FALSE)
+        {
+		$data = array();
+		$this->_data['title'] = '添加子项目';
+		$this->_data['server_name'] = $server_name;
+		$this->_data['platform_id'] = $platform_id;
+		$this->_data['server_env'] = $server_env;
+		$this->_data['server'] = $server;
+		$this->_data['jenkins'] = $jenkins;
+		$this->load->view('admin/project_jenkins_copy',$this->_data);
+		}
+		else
+		{
+			$copy = $this->project_model->get_jenkins_copy_by_server_name($jenkins);		
+			$temp_arrayName = $copy[0];
+			$arrayName = $this->project_model->object_to_array($temp_arrayName);
+			$default = [
+				'server_name' => $jenkins,
+				'server_deploy_ip' => $server,
+				'server_status' => '2'
+			];
+			$data = array_merge($arrayName, $default);
+			$result = $this->project_model->insert_app_server($data);           			
+			if ($result) {
+				$this->project_model->Email_to_ops($name,$jenkins,$copy[0]->server_alias_name,$copy[0]->server_type,$copy[0]->server_env,$server,$copy[0]->server_deploy_port);
+				redirect('admin/project/show_result?server_env='.$copy[0]->server_env.'&ServerName='.$jenkins.'&alias_name='.$copy[0]->server_alias_name.'&server_type='.$copy[0]->server_type.'&server='.$server.'&port='.$copy[0]->server_deploy_port);
+			}
+		}
+	}
 }

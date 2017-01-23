@@ -28,9 +28,25 @@ class Welcome_model extends CI_Model {
 	}
 
 	public function get_ops_on_duty() {
-		$query = $this->db->query("select * from ops_user where level_id = '2'");
+		$query = $this->db->query("select * from ops_user where level_id = '2' and is_dimission = '1'");
 		$row = $query->result();
 		$row['0']->count = $query->num_rows();
 		return $row;
+	}
+	public function get_platform_url() {
+		$query = $this->db->query("select * from ops_gallery_platform where display_id = '1'");
+		$data = $query->result();
+		return $data;
+	}
+	public function get_gallery_platform_list() {
+		$query = $this->db->query("select * from ops_gallery_platform");
+		$row = $query->result();
+		return $row;
+	}
+	public function get_gallerys($platform_id){
+		$gallery_sql_where = $platform_id ? " WHERE gallery_platform_id = '".$platform_id."'" : "";
+		$query = $this->db->query('select * from ops_gallery'.$gallery_sql_where);
+		$data = $query->result();
+		return $data;
 	}
 }

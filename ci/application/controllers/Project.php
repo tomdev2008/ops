@@ -145,6 +145,16 @@ class Project extends Public_Controller {
 		$server_type = $this->input->get('server_type');
 		// $server_project = $this->input->post('server_project');
 		// $project_name = $this->input->post('project_name');
+		switch($server_env){
+			case '1':
+			$env = "开发环境";
+			case '2':
+			$env = "测试环境";
+			case '3':
+			$env = "预发布环境";
+			case '4':
+			$env = "生产环境";
+		}
 		$data = array();
 		$this->_data['title'] = '项目添加结果';
 		$this->load->view('default/project_show',$this->_data);

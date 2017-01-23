@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Gallery extends ADMIN_Controller {
+class Gallery extends MY_Controller {
 
 	public function __construct() {
 		parent::__construct();
@@ -25,7 +25,7 @@ class Gallery extends ADMIN_Controller {
 		$data = $query->result();
 		$this->_data['gallerys'] = $data;
 
-		$this->_data['title'] = '友情链接列表';
+		$this->_data['title'] = '常用链接列表';
 		$this->load->view('admin/header');
 		$this->load->view('admin/gallery',$this->_data);
 		$this->load->view('admin/footer');
@@ -39,15 +39,12 @@ class Gallery extends ADMIN_Controller {
 		$title = $this->input->post('title');
 		$category = $this->input->post('category');
 		$url = $this->input->post('url');
-		$user_id = $this->input->post('user_id');
-		$get_user_name = $this->gallery_model->get_user_list();
-		$this->_data['get_user_name'] = $get_user_name;
+		$user_name = $this->input->post('user_name');
         if ($this->form_validation->run() == FALSE)
         {
 			$data = array();
 			$this->_data['title'] = '添加展示信息';
 			$this->_data['gallery_platform_list'] = $this->gallery_model->get_gallery_platform_list();
-			$this->_data['get_user_name'] = $this->gallery_model->get_user_list();
 			$this->load->view('admin/header');
 			$this->load->view('admin/gallery_add',$this->_data);
 			$this->load->view('admin/footer');
@@ -58,7 +55,7 @@ class Gallery extends ADMIN_Controller {
 				    'gallery_name' => $title,
 				    'gallery_platform_id' => $category,
 				    'gallery_url' => $url,
-				    'user_id' => $user_id
+				    'user_name' => $user_name
 				];       	
 				$result = $this->gallery_model->insert_gallery($data);  
 				if ($result) {
@@ -74,22 +71,26 @@ class Gallery extends ADMIN_Controller {
 		$id = $this->input->get('id', TRUE);
 		$name = $this->gallery_model->get_gallery_name_by_id($id);
 		$url = $this->gallery_model->get_url_by_id($id);
-		$user_id = $this->gallery_model->get_user_id_by_id($id);
-		$get_user_name = $this->gallery_model->get_user_list();
+		$platform_id = $this->gallery_model->get_platform_id_by_id($id);
+		$user_name = $this->gallery_model->get_user_name_by_id($id);
+		$get_platform_name = $this->gallery_model->get_gallery_platform_list();
+		$gallery = $this->gallery_model->get_gallery_list_by_id($id);
+		$this->_data['get_platform_name'] = $get_platform_name;
 		$this->_data['id'] = $id;
 		$this->_data['name'] = $name;
 		$this->_data['url'] = $url;
-		$this->_data['user_id'] = $user_id;
-		$this->_data['get_user_name'] = $get_user_name;
+		$this->_data['user_name'] = $user_name;
+		$this->_data['platform_id'] = $platform_id;
+		$this->_data['gallery'] = $gallery;
         if ($this->form_validation->run() == FALSE)
         {
 			$data = array();
-			$this->_data['title'] = '友情链接修改';
+			$this->_data['title'] = '常用链接修改';
 			$this->_data['id'] = $id;
 			$this->_data['name'] = $name;
 			$this->_data['url'] = $url;
-			$this->_data['user_id'] = $user_id;
-			$this->_data['get_user_name'] = $this->gallery_model->get_user_list();
+			$this->_data['user_name'] = $user_name;
+			$this->_data['platform_id'] = $platform_id;
 			$this->load->view('admin/gallery_update',$this->_data);
         }
         else
@@ -97,8 +98,9 @@ class Gallery extends ADMIN_Controller {
         	$id = $this->input->post('id', TRUE);	
         	$name = $this->input->post('name', TRUE);
         	$url = $this->input->post('url', TRUE);
-			$user_id = $this->input->post('user_id', TRUE);
-			$result = $this->db->query("UPDATE ops_gallery SET gallery_url = '".$url."',user_id = '".$user_id."',gallery_name = '".$name."' WHERE id = '".$id."'");	
+			$user_name = $this->input->post('user_name', TRUE);
+			$platform_id = $this->input->post('platform_id', TRUE);
+			$result = $this->db->query("UPDATE ops_gallery SET gallery_platform_id = '".$platform_id."',gallery_url = '".$url."',user_name = '".$user_name."',gallery_name = '".$name."' WHERE id = '".$id."'");	
 				if ($result) {
 					echo "<script>
 					parent.window.location.reload();

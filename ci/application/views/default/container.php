@@ -144,7 +144,7 @@ server{
                                             ?>
                                                 <td width="10%"><span class="label label-inverse"><?php echo $value_ip->server_type.$value_ip->id?></td>
                                                <td width="20%"><?php echo $value_ip->server_deploy_ip.':'.$value_ip->server_deploy_port?><br>
-                                                    <?php echo $value_ip->server_name?><?php if ($flag == 1) {?><a href="<?php echo 'http://jenkins.ops.xkeshi.so/job/'.$value_ip->server_name?>" target="_blank"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a><?php }?>
+                                                    <?php echo $value_ip->server_name?><a href="<?php echo 'http://jenkins.ops.xkeshi.so/job/'.$value_ip->server_name?>" target="_blank"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a>
                                                 </td>
                                                 <td width="20%"><?php echo $value_ip->server_alias_name; //echo anchor('container#', ' 查看日志', 'title="查看日志"');?></td> 
                                                 <td width="15%"><?php if($value_ip->server_status == 1) {?><span class="label label-success">已部署</span>

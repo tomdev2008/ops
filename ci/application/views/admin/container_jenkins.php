@@ -1,5 +1,5 @@
 <!--  <div style=" position:absolute; left:0; top:0px; width:100%; height:100%"> -->
-                <div class="span9" id="content" style=" position:absolute; top:0px ;left:30px; right:50px; width:90%; height:90%">
+                <div class="span9" id="content" style=" position:absolute;right:10px;left: 5px; width:100%; height:100%">
                      <!-- validation -->
                     <div class="row-fluid">
                          <!-- block -->
@@ -16,10 +16,22 @@
     echo '<br>';
 ?>
                                         <fieldset>                                          
-                                                <div class="control-group">
+                                            <div class="control-group">
                                                 <label class="control-label">项目名称</label>
                                                 <div class="controls">
                                                 <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="server_name" readonly="readonly" value="<?php echo $hidden_server_name?>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">项目别名</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="alias_name" readonly="readonly" value="<?php echo $hidden_server_alias_name?>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">容器类型</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="server_type" readonly="readonly" value="<?php echo $hidden_server_type?>">
                                                 </div>
                                             </div>
                                               <div class="control-group">
@@ -91,7 +103,7 @@
                                             if (empty($hidden_ops_dubbo_port)) {
                                                 ?>
                                                 <div class="control-group">
-                                                <label class="control-label">dubbo端口<span class="required">*</span></label>
+                                                <label class="control-label">dubbo端口</label>
                                                 <div class="controls">
                                                     <input style="width:300px; margin-right:10px;" class="span2 m-wrap" name="ops_dubbo_port" type="text">
                                                 </div>
@@ -109,6 +121,30 @@
                                             <?php
                                             }
                                             ?>  
+                                            <div class="control-group">
+                                                <label class="control-label">开发路径</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="server_deploy_path" readonly="readonly" value="<?php echo $hidden_server_deploy_path?>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">开启脚本</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="server_bin_start" readonly="readonly" value="<?php echo $hidden_server_bin_start?>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">停止脚本</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="server_bin_stop" readonly="readonly" value="<?php echo $hidden_server_bin_stop?>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label">日志路径</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="log_path" readonly="readonly" value="<?php echo $hidden_server_logs_path?>"><input type="button" onclick="add1();" id="add_button" value="追加" /><div id="org" style="margin-top: 5px;"></div>
+                                                </div>
+                                            </div>                                               
                                             <div class="form-actions">
                                               <button type="submit" class="btn btn-primary">确定</button>
                                               <button type="button" class="btn" onclick="close_frame()">取消</button>
@@ -137,5 +173,15 @@
       function close_frame() {  
       var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
       parent.layer.close(index);
+      }
+      function add1(){
+          var input1 = document.createElement('input');
+          input1.setAttribute('type', 'text');
+          input1.setAttribute('name', 'add_log_path');
+          input1.setAttribute('class', 'span2 m-wrap');
+          input1.setAttribute('style', 'width:300px;');
+          var btn1 = document.getElementById("org");
+          btn1.insertBefore(input1,null);
+          document.getElementById('add_button').style.display="none";
       }
         </script>

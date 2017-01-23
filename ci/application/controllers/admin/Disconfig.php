@@ -322,6 +322,7 @@ class Disconfig extends ADMIN_Controller {
 			$data = [
 				'name' => $value->name,
 				'value' => $value->value,
+				'redundance' => $value->redundance,
 				'app_id' => $value->app_id,
 				'version' => $value->version."_copy",
 				'env_id' => $value->env_id,

@@ -22,7 +22,7 @@ class Disconfig extends Public_Controller {
 		$this->_data['app'] = $data;
 		$this->_data['title'] = '配置中心';
 		$this->_data['get_project_name'] = $this->disconfig_model->get_project_name();
-		$this->load->view('default/header');
+		$this->load->view('default/header',$this->_data_header);
 		$this->load->view('default/disconfig',$this->_data);
 		$this->load->view('default/footer');
 		} else {

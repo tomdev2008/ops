@@ -38,11 +38,65 @@ class Container_model extends CI_Model {
 		$result = $this->db->update('ops_app_jenkins', $data);
 		return $result;
 	}
+	public function update_app_server($data2,$server_name) {
+		$this->db->where('server_name', $server_name);
+		$result = $this->db->update('ops_app_server', $data2);
+		return $result;
+	}
 	public function get_app_name_by_id($id) {
 		$this->db->select('server_name');
 		$this->db->from('ops_app_server');
 		$this->db->where('id', $id);
 		$data = $this->db->get()->row('server_name');
+		return $data;
+	}
+	public function get_server_alias_name_by_id($id) {
+		$this->db->select('server_alias_name');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_alias_name');
+		return $data;
+	}
+	public function get_server_type_by_id($id) {
+		$this->db->select('server_type');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_type');
+		return $data;
+	}
+	public function get_server_deploy_path_by_id($id) {
+		$this->db->select('server_deploy_path');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_deploy_path');
+		return $data;
+	}
+	public function get_server_bin_start_by_id($id) {
+		$this->db->select('server_bin_start');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_bin_start');
+		return $data;
+	}
+	public function get_server_bin_stop_by_id($id) {
+		$this->db->select('server_bin_stop');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_bin_stop');
+		return $data;
+	}
+	public function get_server_logs_path_by_id($id) {
+		$this->db->select('server_logs_path');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('server_logs_path');
+		return $data;
+	}
+	public function get_server_logs_path_by_name($server_name) {
+		$this->db->select('server_logs_path');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name', $server_name);
+		$data = $this->db->get()->row('server_logs_path');
 		return $data;
 	}
 	public function get_server_project_by_name($app_name) {
@@ -149,6 +203,13 @@ class Container_model extends CI_Model {
 		$this->db->select('id');
 		$this->db->from('ops_app_jenkins');
 		$this->db->where('ops_server_name', $ops_server_name);
+		$data = $this->db->get()->row('id');
+		return $data;
+	}	
+	public function get_server_id_by_name_from_server($server_name) {
+		$this->db->select('id');
+		$this->db->from('ops_app_server');
+		$this->db->where('server_name', $server_name);
 		$data = $this->db->get()->row('id');
 		return $data;
 	}	

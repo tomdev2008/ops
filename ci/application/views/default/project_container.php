@@ -1,8 +1,24 @@
 
-                <div class="span9" id="content">                    
+                <div class="span9" id="content">  
+                    <div class="row-fluid">
+                            <div class="navbar">
+                                <div class="navbar-inner">
+                                    <ul class="breadcrumb">
+                                        <i class="icon-chevron-left hide-sidebar"><a href='#' title="Hide Sidebar" rel='tooltip'>&nbsp;</a></i>
+                                        <i class="icon-chevron-right show-sidebar" style="display:none;"><a href='#' title="Show Sidebar" rel='tooltip'>&nbsp;</a></i>
+                                        <li>
+                                            <a href="/">Dashboard</a> <span class="divider">/</span>    
+                                        </li>
+                                        <li>
+                                            <a href="/project/">项目管理</a> <span class="divider">/</span>    
+                                        </li>
+                                        <li class="active">容器信息</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>                  
     <?php
         foreach ($container as $value) {
-
         $ip_environment = [
                     [                   
                         "name" => "开发环境",
@@ -28,6 +44,9 @@
         foreach ($ip_environment as $key => $ip_server) {
             $ip_data = 'app_server_'.$value->id.'_'.$ip_server['server_env'];
             $ip_data = $$ip_data;
+        $container_sql_where = " WHERE server_env = '".$ip_server['server_env']."' and server_project = '".$value->id."'" ;
+        $query = $this->db->query("select id,server_name,server_type,server_project,server_env,server_alias_name,server_status,server_deploy_ip,group_concat(CONCAT(server_deploy_ip,':',server_deploy_port))as ip_repeat from ops_app_server".$container_sql_where."  group by server_name order by id desc");
+        $containers = $query->result();
                 if ($ip_data) {
     ?>   
             <div class="row-fluid">
@@ -44,97 +63,52 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>反向代理</th>
-                                                <th></th>
-                                                <th><?php echo $ip_server['name']?></th>
-                                                <th>应用名称</th>
-                                                <th>属性</th>                                  
+                                                <th width="5%">#</th>
+                                                <th width="30%">APP名称</th>  
+                                                <th width="10%">容器名称</th>                                               
+                                                <th width="20%">部署服务器</th>
+                                                <th width="20%">应用别名</th>
+                                                <th width="10%">属性</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                         <?php
-                                //$ip_data = explode(',', $value->$ip_server['server_ip']);   
-                                $ip_data_count = count($ip_data);
-                                $i = 1;
-                                foreach ($ip_data as $key => $value_ip) {
-                        ?>                                         
-                                            <tr>
-                                            <?php
-                                                if ($i == 1) {
-                                            ?>
-                                            <td width="10%" style="vertical-align:middle;text-align:center;" rowspan="<?php echo $ip_data_count?>">
-                                            <?php echo anchor('#nginx_'.$value->id.'', 'NGINX', 'data-toggle="modal" class="btn btn-success btn-mini" title="NGINX"');?>
-                                            <i class="icon-arrow-right"></i>
-                                            <div id="nginx_<?php echo $value->id ?>" class="modal hide">
-                                            <div class="modal-header">
-                                                <button data-dismiss="modal" class="close" type="button">&times;</button>
-                                                <h3>NGINX info</h3>
-                                            </div>
-                                            <div class="modal-body">
-                                                <pre style="text-align:left;">
-upstream imiaoj {
-    server 10.117.20.99:9591;
-}
-
-
-server{
-        listen 80;
-        server_name wx.imiaoj.com;
-        if ($query_string ~* (.*)(insert|select|delete|update|\*|master|truncate|declare|\'|\(|\)|exec)(.*)$ ) { return 404; }
-        access_log /home/www/logs/nginx_logs/wx.imiaoj.com/wx.imiaoj.com.log main;
-
-        location /x_ngx_status {
-                stub_status on;
-                access_log off;
-                allow 61.130.0.179;
-                allow 60.195.252.106;
-                deny all;
-        }
-
-
-
-
-        rewrite ^(.*)\;(JSESSIONID|jsessionid)=(.*)$  $1  break;
-
-        location /app/microweb/ {
-                alias /home/www/static-xkeshi/product/git-product-xkeshi-microweb-mj/dist/;
-                if ($request_uri ~* ^/app/microweb/(.*)\.(gif|jpg|jpeg|png|bmp|ico|css|js|svg|woff|woff2|eot|ttf)$) {
-                        expires 90d;
-                }
-                if ($request_uri ~* ^/app/microweb/(.*)\.html$) {
-                        expires -1;
-                }
-        }
-
-
-        location / {
-                proxy_pass http://imiaoj;
-                include proxy.conf;
-        }
-}
-
-                                                </pre>
-                                            </div>
-                                        </div>
-                                            </td>
-                                            <?php
-                                                }
-                                            ?>
-                                               <td width="10%"><span class="label label-inverse"><?php echo $value_ip->server_type.$value_ip->id?></td>
-                                               <td width="20%"><?php echo $value_ip->server_deploy_ip.':'.$value_ip->server_deploy_port?><br>
-                                                    <?php echo $value_ip->server_name?><?php if ($flag == 1) {?><a href="<?php echo 'http://jenkins.ops.xkeshi.so/job/'.$value_ip->server_name?>" target="_blank"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a><?php }?>
-                                                </td>
-                                                <td width="20%"><?php echo $value_ip->server_alias_name; //echo anchor('container#', ' 查看日志', 'title="查看日志"');?></td> 
-                                                <td width="15%"><?php if($value_ip->server_status == 1) {?><span class="label label-success">已部署</span>
-                                                    <?php }else if($value_ip->server_status == 2) {?><span class="label label-success">部署中</span>
-                                                    <?php }else if($value_ip->server_status == 0) {?><span class="label label-inverse">已删除</span>
-                                                    <?php }?><?php if ($flag == 1) {?><span class="label label-info"><a style="color: white" href="/disconfig?env=<?php echo $flag_env = $this->container_model->get_server_env_by_server_name($value_ip->server_name);?>&project_id=<?php echo $pid_id?>&app=<?php echo $value_ip->server_name?>">配置中心</a></span><?php }?>
-                                                </td>                                               
+                                <?php
+                                        $num = 0;
+                                        foreach( $containers as $va ) {
+                                        $sum = $this->project_model->get_num_all_by_server_name($va->server_name);
+                                        // echo $sum;
+                                ?>        
+                                            <tr class="odd gradeX">
+                                            <td style="text-align: left; vertical-align: middle;" rowspan="<?php echo $sum?>"><?php echo $num=$num+1?></td>
+                                                <td style="text-align: left; vertical-align: middle;" rowspan="<?php echo $sum?>"><?php echo $va->server_name?></a>&nbsp;<a href="http://jenkins.ops.xkeshi.so/job/<?php echo $va->server_name?>" target="_blank"><img src="<?php echo base_url();?>images/jenkins.ico" border="0" width="16" height="16"></a></td>
+                            <?php
+                                    $ID = $this->project_model->get_project_id_by_server_name($va->server_name);
+                                    foreach ($ID as $key => $value2)
+                                    {
+                                        $id = $value2->id;
+                                        $project_env_num = 1;
+                                        $haha = $this->project_model->get_alias_by_id($value2->id);
+                                        $server_deploy_port = $this->project_model->get_server_deploy_port_by_id($value2->id);
+                                        $server_type = $this->project_model->get_server_type_by_id($value2->id);
+                            ?>
+                                                <td><span class="label label-inverse"><?php echo $server_type.$id?></span></td>
+                                                <td>
+                                                <?php
+                                                    echo $haha; 
+                                                    echo ':'.$server_deploy_port?><br>
+                                                    </td>
+                                                <td><?php echo $va->server_alias_name?></td>
+                                                <td><?php if($va->server_status == 1) {?><span class="label label-success">已部署</span>
+                                                    <?php }else if($va->server_status == 2) {?><span class="label label-warning">部署中</span>
+                                                    <?php }else if($va->server_status == 0) {?><span class="label label-danger">已删除</span>
+                                                    <?php }?><?php if ($flag == 1) {?><span class="label label-info"><a style="color: white" href="/disconfig?env=<?php echo $flag_env = $this->container_model->get_server_env_by_server_name($va->server_name);?>&project_id=<?php echo $pid_id?>&app=<?php echo $va->server_name?>">配置中心</a></span><?php }?>
+                                                </td>  
                                             </tr>
-                        <?php
-                            $i++;
-                            }
-                        ?>
+                                 <?php
+                                 }
+                             }
+                                 ?>           
+                                                                                                      
                                         </tbody>
                                     </table>
                                 </div> </div>

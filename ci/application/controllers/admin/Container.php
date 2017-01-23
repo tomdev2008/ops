@@ -120,14 +120,28 @@ class Container extends ADMIN_Controller {
 		$hidden_repo_url = $this->container_model->get_repo_url_by_name($hidden_server_name);	
 		$hidden_ops_war_name = $this->container_model->get_war_name_by_name($hidden_server_name);	
 		$hidden_ops_dubbo_port = $this->container_model->get_dubbo_port_by_name($hidden_server_name);
+
+		$hidden_server_alias_name = $this->container_model->get_server_alias_name_by_id($id);
+		$hidden_server_type = $this->container_model->get_server_type_by_id($id);
+		$hidden_server_deploy_path = $this->container_model->get_server_deploy_path_by_id($id);
+		$hidden_server_bin_start = $this->container_model->get_server_bin_start_by_id($id);
+		$hidden_server_bin_stop = $this->container_model->get_server_bin_stop_by_id($id);
+		$hidden_server_logs_path = $this->container_model->get_server_logs_path_by_id($id);
 		$this->_data['hidden_server_name'] = $hidden_server_name;
 		$this->_data['hidden_repo_type'] = $hidden_repo_type;
 		$this->_data['hidden_repo_url'] = $hidden_repo_url;
 		$this->_data['hidden_ops_war_name'] = $hidden_ops_war_name;
 		$this->_data['hidden_ops_dubbo_port'] = $hidden_ops_dubbo_port;
-			if ($this->form_validation->run() == FALSE){
+
+		$this->_data['hidden_server_alias_name'] = $hidden_server_alias_name;
+		$this->_data['hidden_server_type'] = $hidden_server_type;
+		$this->_data['hidden_server_deploy_path'] = $hidden_server_deploy_path;
+		$this->_data['hidden_server_bin_start'] = $hidden_server_bin_start;
+		$this->_data['hidden_server_bin_stop'] = $hidden_server_bin_stop;
+		$this->_data['hidden_server_logs_path'] = $hidden_server_logs_path;
+		if ($this->form_validation->run() == FALSE){
 			$data = array();
-			$this->_data['title'] = 'jenkins配置';
+			$this->_data['title'] = 'APP详情';
 			$this->_data['hidden_server_name'] = $hidden_server_name;
 			$this->_data['hidden_repo_type'] = $hidden_repo_type;
 			$this->_data['hidden_repo_url'] = $hidden_repo_url;
@@ -142,7 +156,36 @@ class Container extends ADMIN_Controller {
 	        	$repo_url = $this->input->post('repo_url');
 	        	$ops_war_name = $this->input->post('ops_war_name');
 	        	$ops_dubbo_port = $this->input->post('ops_dubbo_port');
+	        	$ops_dubbo_port = $this->input->post('ops_dubbo_port');
+	        	$add_log_path = $this->input->post('add_log_path');
 	        	$server_id = $this->container_model->get_server_id_by_name($server_name);
+	        	$server_logs_path = $this->container_model->get_server_logs_path_by_name($server_name);
+	        	if ($add_log_path != NULL) {
+	        		$data2 =[
+						'server_logs_path' =>$server_logs_path.','.$add_log_path
+					];  	 
+					$result2 = $this->container_model->update_app_server($data2,$server_name);    
+					if ($result2) {
+									$data =[
+											'ops_server_name' => $server_name,
+											'ops_repo_type' => $repo_type,
+											'ops_repo_url' => $repo_url,
+											'ops_war_name' => $ops_war_name,
+											'ops_dubbo_port' => $ops_dubbo_port
+											];       	
+										$result = $this->container_model->insert_jenkins($data,$server_id); 
+										if ($result) {
+												echo "<script>
+												parent.window.location.reload();
+							         			var index = parent.layer.getFrameIndex(jenkins.name); //获取窗口索引
+							         			parent.layer.close(index);  	
+												</script>";
+											}
+					   		} else {
+					   			echo '修改失败';
+					   		}
+					   		   		
+	        	} else {	        	       	
 			 	$data =[
 					'ops_server_name' => $server_name,
 					'ops_repo_type' => $repo_type,
@@ -157,7 +200,8 @@ class Container extends ADMIN_Controller {
 	         			var index = parent.layer.getFrameIndex(jenkins.name); //获取窗口索引
 	         			parent.layer.close(index);  	
 						</script>";
-					}				
+					}	
+				}			
 		    } 		
 	}
 	public function add()

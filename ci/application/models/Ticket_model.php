@@ -403,7 +403,7 @@ class Ticket_model extends CI_Model {
 	    $str = str_replace ( ">", '>；', $str );
 	    $str = str_replace ( "\n", '<br>', $str );  
 	    $str = preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1" target="_blank">$1</a>', $str);
-	    $str = preg_replace ( "[\[em_([0-9]*)\]]", "<img src=\"http://yyx.ops.xkeshi.so/qqface/arclist/$1.gif\" />", $str );
+	    $str = preg_replace ( "[\[em_([0-9]*)\]]", "<img src=\"http://ops.xkeshi.so/qqface/arclist/$1.gif\" />", $str );
 	    return $str;
 	}
 }
