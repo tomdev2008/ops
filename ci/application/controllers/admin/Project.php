@@ -5,8 +5,8 @@ class Project extends ADMIN_Controller {
 
 	public function __construct() {
 		parent::__construct();
-		$this->load->library(array('session', 'form_validation','typography'));
-		$this->load->helper(array('form', 'url', 'cookie','download'));
+		$this->load->library(array('session', 'form_validation','typography','PHPRequests'));
+		$this->load->helper(array('form', 'url', 'cookie','download','typography'));
 		$this->load->database();
 		$this->load->model('admin/project_model');
 		
@@ -255,6 +255,7 @@ class Project extends ADMIN_Controller {
 			$dubbo_port = $this->input->post('dubbo_port');	
 			$server = $this->input->post('server');
 			$port_id = $this->project_model->search_port_id($ServerName);
+			$app_logs_path = $this->input->post('app_logs_path');
 			if ($port_id == NULL) {
 				$http_port = $this->input->post('http_port');
 				$data1 = [
@@ -264,6 +265,7 @@ class Project extends ADMIN_Controller {
 					'server_type' => $server_type,
 					'server_project' => $server_project2,
 					'server_deploy_path' => "/home/www/xkeshi/".$ServerName,
+					'app_logs_path' => $app_logs_path,
 					'server_logs_path' => "/home/".$server_type."_logs/".$ServerName,
 					'server_deploy_ip' => $server,
 					'server_bin_start' => $server_bin_start,
@@ -291,6 +293,7 @@ class Project extends ADMIN_Controller {
 					'server_type' => $server_type,
 					'server_project' => $server_project2,
 					'server_deploy_path' => "/home/www/xkeshi/".$ServerName,
+					'app_logs_path' => $app_logs_path,
 					'server_logs_path' => "/home/".$server_type."_logs/".$ServerName,
 					'server_deploy_ip' => $server,
 					'server_bin_start' => $server_bin_start,
@@ -357,4 +360,24 @@ class Project extends ADMIN_Controller {
 			}
 		}
 	}
+
+//etcd接口
+	public function etcd()
+	 	{
+	 		$server_name = $this->input->get('server_name');	
+			$data = array();
+			$this->_data['server_name'] = $server_name;
+	 		$this->load->view('admin/project_etcd',$this->_data);
+	 }
+	public function confirm_etcd()
+	 	{
+	 		$server_name = $this->input->get('server_name');
+	 		$result = $this->project_model->get_etcd_by_server_name($server_name); 
+	 		//$etcd = json_encode($result,TRUE);
+			$data = array();
+			$this->_data['result'] = $result;
+	 		$this->load->view('admin/project_etcd_confirm',$this->_data);
+			
+	 }
+
 }

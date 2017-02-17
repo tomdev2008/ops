@@ -36,7 +36,7 @@
           </div>
           <div class="control-group">
           <label class="control-label">
-          <strong>账号( 英文 )<span class="required">*</span><br>( 姓名全拼或首字母 )</strong>
+          <strong>账号( 英文小写 )<span class="required">*</span><br>( 姓名全拼或首字母 )</strong>
           </label>
               <div class="controls">
                   <input type="text" style="width:150px;height:30px" name="email" id="email" data-required="1" class="span2 m-wrap"/>
@@ -109,7 +109,7 @@
   <script src="<?php echo base_url();?>vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
   <script src="<?php echo base_url();?>bootstrap/js/bootstrap.min.js"></script>
   <script src="<?php echo base_url();?>vendors/jquery-1.9.1.js"></script>
-  <script src="<?php echo base_url();?>layer/layer.js"></script>
+
   
   <script type="text/javascript">
       // 验证码打印
@@ -245,9 +245,10 @@
         var password1 = $('#password1')
         var password2 = $('#password2')
         var captcha = $('#captcha')
-        var r = /^(?![^a-zA-Z]+$)(?!\D+$)/
         var tel = $('#tel')
-        var t = /^1(3|4|5|7|8)\d{9}$/
+        var r = /^(?![^a-zA-Z]+$)(?!\D+$)/  // 密码验证
+        var t = /^1(3|4|5|7|8)\d{9}$/  //手机号验证
+        var e = /^[a-z]+$/ //用户名验证
         if (level.val() == "") {
             layer.msg('请选择部门！', {time: 2000,icon: 1});
             return false;
@@ -260,6 +261,11 @@
         if (email.val() == "") {
           email.focus();
           layer.msg('请输入账号！', {time: 2000,icon: 1});
+          return false;
+        }
+        if (!email.val().match(e)) {
+          email.focus();
+          layer.msg('账号必须全小写！', {time: 2000,icon: 1});
           return false;
         }
         if (res == 0){
@@ -292,7 +298,6 @@
           return false;
         }
         if (res == 1) {
-          var r
           $.ajax({
             url:"/register/captcha_check?captcha="+captcha.val(),
             type:"GET",

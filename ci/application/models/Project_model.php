@@ -144,5 +144,75 @@ class Project_model extends CI_Model {
 		$this->db->where('id', $id);
 		$data = $this->db->get()->row('server_type');
 		return $data;
-	}	
+	}
+	public function get_platform()
+	{
+		$query = $this->db->query("select name from ops_platform");
+		$row = $query->result();
+		return $row;
+	}
+	public function form_ticket($platform,$ProjectNameCN,$ProjectNameEN,$container,$StorageMethod,$StoragePath,$war,$logbath)
+	{
+		$contents = "新的项目申请：
+			项目类别:".$platform."
+			项目中文名称:".$ProjectNameCN."
+			项目英文名称:".$ProjectNameEN."
+			容器选择:".$container."
+			仓库地址:".$StorageMethod."
+			存储地址:".$StoragePath."
+			war包名称:".$war."
+			应用日志目录:".$logbath;
+		return $contents;
+	}
+	public function get_max_TicketId()
+	{
+		$this->db->select_max("id");
+		$this->db->from("ops_ticket");
+		$data = $this->db->get()->row('id');
+		return $data;
+	}
+	public function Form_to_ops($u_id,$platform,$ProjectNameCN,$ProjectNameEN,$container,$StorageMethod,$StoragePath,$war,$logbath){
+		$this->load->library('email');
+		$config['protocol'] = 'smtp';
+		$config['smtp_host'] = 'ssl://smtp.exmail.qq.com';
+		$config['smtp_user'] = 'opsalerts@xkeshi.com';
+		$config['smtp_pass'] = 'Xkeshi@123';
+		$config['mailtype'] = 'html';
+		$config['smtp_port'] = 465;
+		$config['charset'] = 'utf-8';
+		$config['wordwrap'] = TRUE;
+		$config['mailtype'] = 'html';
+		$this->email->initialize($config);
+		$config['crlf'] = "\r\n";
+		$this->email->set_newline("\r\n");
+		$this->email->from('opsalerts@xkeshi.com', '【运维项目发布系统】');
+		$this->email->to('nxb@xkeshi.com');
+		$this->email->subject('通知：有新的项目申请，申请人：'.$this->get_name_by_id($u_id));
+		$footer = "
+		<br>
+		<hr/>
+		<p>
+		<font size=4><strong>爱客仕运维部</strong></font>
+		<br>
+		电话：0571-87179065
+		<br>
+		地址：杭州市江干区钱江路1366号华润大厦A座14楼
+		<br>
+		网址：<a href=http://www.xkeshi.com>http://www.xkeshi.com</a>
+		</p>
+		";
+		$message = "<strong>".$this->get_name_by_id($u_id)."</strong> to 运维组：<br>
+		提交了新的子项目，请马上处理。
+		<br>项目类别:".$platform."
+		<br>项目中文名称:<strong>".$ProjectNameCN."</strong>
+		<br>项目英文名称:<strong>".$ProjectNameEN."</strong>
+		<br>容器选择:<strong>".$container."</strong>
+		<br>仓库类型:<strong>".$StorageMethod."</strong>
+		<br>存储地址:<strong>".$StoragePath."</strong>
+		<br>war包名称:<strong>".$war."</strong>
+		应用日志目录:<strong>".$logbath."</strong>
+		<br>".$footer;
+		$this->email->message($message);
+		$this->email->send();
+	}
 }

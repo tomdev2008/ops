@@ -17,7 +17,7 @@ class Config extends CI_Controller {
         	echo show_error($current_ip.' is not a valid IP address!', 401, 'Disconf');
 		}
 	}
-
+	
 	public function file(){
 		// $app = $this->input->get('app', TRUE);
 		$env = $this->input->get('env', TRUE);
@@ -34,5 +34,10 @@ class Config extends CI_Controller {
 		$name = $disconf->name;
 		$data = $disconf->value;
 		force_download($name, $data);		
+	}
+	
+	public function agent()
+	{
+		# code...
 	}
 }

@@ -37,7 +37,7 @@
 					<div class="controls">
 					<?php echo form_error('oldpassword', '<div class="alert alert-error"><button class="close" data-dismiss="alert">&times;</button>','</div>');?>
 						<input type="password" style="width:180px;height:30px;margin-left" id="oldpassword" name="oldpassword" data-required="1" class="span2 m-wrap"/>
-						<strong>【<a href="#" onclick="resetpassword('http://<?php echo $_SERVER['HTTP_HOST']?>/login/reset')"> 忘记密码请点 </a>】</strong>
+						<strong>【<a href="#" onclick="resetpassword('/login/reset')"> 忘记密码请点 </a>】</strong>
 					</div>
 				</div>
 				<div class="control-group" style="margin-left:80px;margin-top:50px">

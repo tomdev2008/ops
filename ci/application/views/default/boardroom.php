@@ -122,7 +122,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -138,7 +138,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents(site_url('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents(site_url('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -154,7 +154,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -170,7 +170,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -186,7 +186,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -202,7 +202,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;
@@ -218,7 +218,7 @@
                                    <?php
                                           echo "【".$boardroom_apply->name."】<br>";
                                     ?>
-                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('http://<?php echo $_SERVER['HTTP_HOST']?>/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
+                                    <a style="color:white;text-decoration:underline" href="javascript:;" onclick="get_contents('/boardroom/get_contents_by_id?id=<?php echo $boardroom_apply->id?>')">
                                           <?php echo $boardroom_apply->reason."<br>";?></a>
                                     <?php
                                           echo $starttime."到".$overtime;

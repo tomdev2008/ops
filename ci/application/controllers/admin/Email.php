@@ -43,6 +43,7 @@ class Email extends Admin_Controller
 		$this->form_validation->set_rules('account','account','required');
 		$this->form_validation->set_rules('eamil','eamil','required');
 		$this->form_validation->set_rules('department','department','required');
+		$this->form_validation->set_rules('telephone','telephone','required');
 		// $this->form_validation->set_rules('group','group','required');
 		if ($this->form_validation->run() == FALSE) {
 			$this->_data['department'] = $this->config->item('email_department');//邮箱部门
@@ -63,6 +64,7 @@ class Email extends Admin_Controller
 			$eamil = $this->input->post('eamil');
 			$EamilAccount = $account.$eamil;
 			$department = $this->input->post('department');
+			$moblie = $this->input->post('telephone');
 			// $group = $this->input->post('group');
 			$password = 'Abc110';//初始密码
 			$admin_id = $this->session->userdata('admin_id');
@@ -72,7 +74,7 @@ class Email extends Admin_Controller
 			$cTMailSecret = $this->config->item('ops_email_key');
 			// 获取OAuth验证授权
 			$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
-			$result = $this->email_model->add_email($access_token,$EamilAccount,$name,$password,$department);
+			$result = $this->email_model->add_email($access_token,$EamilAccount,$name,$password,$department,$moblie);
 			$errors = [
 				'user_existed' => '账号已存在！',
 				'pwd_invalid' => '密码不符合安全设定！',
@@ -86,7 +88,7 @@ class Email extends Admin_Controller
 				// ];
 				//$res = $this->email_model->add_email_in_group($access_token,$group,$EamilAccount);
 				//if ($res == NULL) {
-					$this->email_model->open_wxtoken($access_token,$EamilAccount);
+					//$this->email_model->open_wxtoken($access_token,$EamilAccount);//开启微信验证
 					$this->email_model->insert_email_check_logs($admin_id);//添加记录操作日志
 				 	echo "<script>
 				 		alert('注册成功！');

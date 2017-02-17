@@ -4,11 +4,14 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="page-header">
-                                <h1>常用链接内容管理</h1>
+                                <h1>常用链接管理</h1>
                             </div>
                         </div>
                     </div>
-                                    <p><?php echo anchor('admin/gallery/add', '新增常用链接 <i class="glyphicon glyphicon-plus glyphicon-white"></i>', 'class="btn btn-primary" title="增加分组"');?></p>
+                    <p>
+                        <?php echo anchor('admin/platform', '分组管理 <i class="glyphicon glyphicon-list glyphicon-white"></i>', 'class="btn btn-primary" title="分组管理"');?>
+                        <?php echo anchor('admin/gallery/add', '新增常用链接 <i class="glyphicon glyphicon-plus glyphicon-white"></i>', 'class="btn btn-primary" title="新增常用链接"');?>
+                    </p>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-default bootstrap-admin-no-table-panel">

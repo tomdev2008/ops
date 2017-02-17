@@ -13,6 +13,7 @@
     $attributes = ['class' => 'form-horizontal', 'id' => 'form_sample_1'];
     echo form_open('admin/platform/update', $attributes);
     echo form_hidden('id', $id);
+    echo form_hidden('hidden_display_id', $hidden_display_id);
     echo '<br>';
 ?>
     <fieldset>
@@ -22,7 +23,21 @@
                   <input type="text" name="name" data-required="1" style="width:200px; margin-right:10px;" class="span2 m-wrap" value="<?php echo $name;?>" />
             </div>
                 </div>
-          
+    <div class="control-group">
+                  <label class="control-label">是否显示在首页<span class="required">*</span></label>
+                  <div class="controls">
+                   <?php 
+                  if ($hidden_display_id == 0) { ?>
+                    <input type="checkbox" name="display_id" value="1" >显示
+                 <?php } 
+                 else {
+               ?>
+                  <input type="checkbox" checked="checked" name="display_id" value="1" >显示
+                 <?php } 
+                 ?>
+
+            </div>
+                </div>          
     <div class="form-actions">
                   <button type="submit" class="btn btn-primary">确定</button>
                   <button type="button" class="btn" onclick="close_frame()">取消</button>
@@ -37,15 +52,15 @@
                 </div>
 
 <!--/.fluid-container-->
-  <script src="http://ops.xkeshi.so/vendors/jquery-1.9.1.min.js"></script>
-  <script src="http://ops.xkeshi.so/assets/scripts.js"></script>
-  <script src="http://ops.xkeshi.so/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-  <link href="http://ops.xkeshi.so/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/assets/styles.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/assets/DT_bootstrap.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" media="screen">
+  <script type="text/javascript" src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="<?php echo base_url();?>assets/scripts.js"></script>
+  <script type="text/javascript" src="<?php echo base_url();?>vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+  <link href="<?php echo base_url();?>bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>assets/styles.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>assets/DT_bootstrap.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" media="screen">
  <script>
 
       function close_frame() {  

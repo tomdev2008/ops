@@ -140,11 +140,17 @@
                                                 </div>
                                             </div>
                                             <div class="control-group">
-                                                <label class="control-label">日志路径</label>
+                                                <label class="control-label">应用日志路径</label>
+                                                <div class="controls">
+                                                <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="app_logs_path" value="<?php echo $hidden_app_logs_path?>"></div>
+                                                </div>
+                                            <div class="control-group">
+                                                <label class="control-label">访问日志路径</label>
                                                 <div class="controls">
                                                 <input style="width:300px; margin-right:10px;" class="span2 m-wrap" type="text" name="log_path" readonly="readonly" value="<?php echo $hidden_server_logs_path?>"><input type="button" onclick="add1();" id="add_button" value="追加" /><div id="org" style="margin-top: 5px;"></div>
                                                 </div>
-                                            </div>                                               
+                                            </div>                                              
+                                            </div>                                              
                                             <div class="form-actions">
                                               <button type="submit" class="btn btn-primary">确定</button>
                                               <button type="button" class="btn" onclick="close_frame()">取消</button>
@@ -159,15 +165,15 @@
                 </div>
 
 <!--/.fluid-container-->
-  <script src="http://ops.xkeshi.so/vendors/jquery-1.9.1.min.js"></script>
-  <script src="http://ops.xkeshi.so/assets/scripts.js"></script>
-  <script src="http://ops.xkeshi.so/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-  <link href="http://ops.xkeshi.so/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/assets/styles.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/assets/DT_bootstrap.css" rel="stylesheet" media="screen">
-  <link href="http://ops.xkeshi.so/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" media="screen">
+  <script type="text/javascript" src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="<?php echo base_url();?>assets/scripts.js"></script>
+  <script type="text/javascript" src="<?php echo base_url();?>vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+  <link href="<?php echo base_url();?>bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>assets/styles.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>assets/DT_bootstrap.css" rel="stylesheet" media="screen">
+  <link href="<?php echo base_url();?>bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" media="screen">
   <link rel="stylesheet" href="<?php echo base_url();?>chosen_v1.6.2/chosen.css">
         <script type="text/javascript">
       function close_frame() {  

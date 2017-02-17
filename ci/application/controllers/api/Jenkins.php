@@ -26,7 +26,6 @@ class Jenkins extends CI_Controller {
 			 	$res = str_replace(' "','"',json_encode($server[$server_key-1], JSON_PRETTY_PRINT));
 			 	echo str_replace('\/','/',$res);
 			}
-			
 		}
 		else if ($pretty == ""){
 			if($server_key == "") {

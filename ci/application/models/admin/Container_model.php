@@ -85,6 +85,13 @@ class Container_model extends CI_Model {
 		$data = $this->db->get()->row('server_bin_stop');
 		return $data;
 	}
+	public function get_app_logs_path_by_id($id) {
+		$this->db->select('app_logs_path');
+		$this->db->from('ops_app_server');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('app_logs_path');
+		return $data;
+	}
 	public function get_server_logs_path_by_id($id) {
 		$this->db->select('server_logs_path');
 		$this->db->from('ops_app_server');

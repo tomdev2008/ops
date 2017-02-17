@@ -3,6 +3,18 @@
                 <div class="col-md-10">
                     <div class="row">
                         <div class="col-lg-12">
+                            <div class="navbar navbar-default bootstrap-admin-navbar-thin">
+                                <ol class="breadcrumb bootstrap-admin-breadcrumb">
+                                    <li>
+                                        <a href="/admin/user">人员管理</a>
+                                    </li>                                    
+                                    <li>人员组管理</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
                             <div class="page-header">
                                 <h1>人员组管理</h1>
                             </div>

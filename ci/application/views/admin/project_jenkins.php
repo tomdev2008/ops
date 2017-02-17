@@ -65,6 +65,12 @@
           </div>
       </div>
       <div class="control-group">
+        <label class="control-label">应用日志路径</label>
+          <div class="controls">
+            <input type="text" style="width:321px;height:30px" name="app_logs_path" data-required="1" class="span2 m-wrap"/>
+          </div>
+      </div>
+      <div class="control-group">
           <label class="control-label">项目环境</label>
             <div class="controls">
                 <input type="text" id="server_env" name="server_env" class="span6 m-wrap" readonly value="<?php echo $this->project_model->get_env_alias_by_env($server_env); ?>" />

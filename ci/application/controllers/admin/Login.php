@@ -32,6 +32,7 @@ class Login extends CI_Controller {
 					$data = [
 					'admin_id'	=> $user_data[0],
 					'admin_level_id' => $user_data[1],
+					'admin_role_id' => $user_data[2],
 					'adminname' => $username.'@xkeshi.com',
 					'is_admin_logged_in' => true
 					];
@@ -69,7 +70,14 @@ class Login extends CI_Controller {
 	}
 	public function logout()
 	{
-		$this->session->sess_destroy();
+		$data = [
+					'admin_id'	,
+					'admin_level_id' ,
+					'admin_role_id' ,
+					'adminname' ,
+					'is_admin_logged_in' ,
+					];
+		$this->session->unset_userdata($data);
 		redirect('/admin/login');
 	}	
 }

@@ -22,14 +22,27 @@ class Login_model extends CI_Model {
 	}
 	public function get_user_id_from_username($username, $password, $domain) {
 		$level_id = ['1', '2', '3'];  //后端管理组和运维组,API组
-		$this->db->select('id, level_id');
+		$this->db->select('id, level_id,role_id');
 		$this->db->from('ops_user');
 		$this->db->where('email', $username.$domain);
 		$this->db->where('is_dimission', 1);
 		//$this->db->where_in('level_id', $level_id);
 		$data = $this->db->get()->row();
 		if ($data) {
-			return $data->id.','.$data->level_id;
+			return $data->id.','.$data->level_id.','.$data->role_id;
+		} else {
+			return false;
+		}
+	}
+	public function accountvalidate($account)// 用户登录验证()
+	{
+		$this->db->select('id, level_id,role_id');
+		$this->db->from('ops_user');
+		$this->db->where('email', $account);
+		$this->db->where('is_dimission', 1);
+		$data = $this->db->get()->row();
+		if ($data) {
+			return $data->id.','.$data->level_id.','.$data->role_id;
 		} else {
 			return false;
 		}

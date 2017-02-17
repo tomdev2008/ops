@@ -83,6 +83,14 @@
 							            </select>
 							        </div>
 			                    </div>
+                                <div class="form group has-success" >
+                                    <label class="col-lg-2 control-label" style="margin-top: 20px"><strong>绑定手机号</strong><span class="required">*</span></label>
+                                    <div class="col-lg-10" style="margin-top: 20px">
+                                        <input class="form-control" type="text" id="telephone" name="telephone" style="width:180px;height:30px"/>
+                                        <span class="label label-success" id="tel_success" style="display: none;">手机号可用</span>
+                                        <span class="label label-danger" id="tel_danger" style="display: none;">请输入正确的手机号码</span>
+                                    </div>
+                                </div>
 			                    <!-- <div class="form group has-success" style="margin-top: 50px;">
 			                    	<label class="col-lg-2 control-label" style="margin-top: 30px"><strong>所属群组</strong><span class="required">*</span></label>
 							        <div class="col-lg-10">
@@ -120,6 +128,30 @@
 <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/bootstrap-admin-theme-change-size.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>admin-static/vendors/easypiechart/jquery.easy-pie-chart.js"></script>
 <script type="text/javascript">
+    var tm = 0
+    // 手机号匹配规则
+    function telephone_match(tel) {
+        var t = /^1(3|4|5|7|8)\d{9}$/
+        if (tel.match(t)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    // 验证手机号
+    $("#telephone").on('keyup change',function() {
+        if (telephone_match($(this).val())) {
+            tm = 1;
+            $("#tel_danger").hide();
+            $("#tel_success").show();
+        }
+        else{
+            tm = 0;
+            $("#tel_success").hide();
+            $("#tel_danger").show();
+        }
+    })
 	// 邮箱验证
       var res = 0
       $("#account").on('change',function(val){
@@ -195,7 +227,12 @@
     		group.focus();
     		return false;
     	}
-    	if (res == 1) {
+        if (mt == 0) {
+            telephone.focus();
+            layer.msg('请输入正确的手机号码！', {time: 2000,icon: 1});
+            return false;
+        }
+    	if (res == 1 && mt == 0) {
     		return true;
     	}
     	else{

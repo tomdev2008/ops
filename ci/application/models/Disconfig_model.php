@@ -15,11 +15,13 @@ class Disconfig_model extends CI_Model {
 		$this->load->database();
 		
 	}
-	public function get_leader_by_id($id) {
-		$this->db->select('group_leader');
-		$this->db->from('ops_user');
-		$this->db->where('id', $id);
-		$data = $this->db->get()->row('group_leader');
+	public function get_permission_by_id($id) {
+		$this->db->select('power_status');
+		$this->db->from('ops_user_action');
+		$this->db->where('user_id', $id);
+		$this->db->where('power_id', 26);
+		$this->db->where('power_type', 2);
+		$data = $this->db->get()->row('power_status');
 		return $data;
 	}
 	public function insert_disconfig_batch($data) {

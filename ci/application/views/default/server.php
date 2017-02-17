@@ -1,5 +1,5 @@
 
-                <div class="span10" id="content">
+                <div class="span9" id="content">
                     <div class="row-fluid">
     <?php
         foreach ($server_location as $value) {
@@ -58,7 +58,7 @@
                                                 <td><?php echo $value->type == 'ESXi' ? "<span class='label label-inverse'>$value->type $value->esxi_version</span>" : $value->type;?></td>
                                                 <td><?php echo $value->service_no;?></td>
                                                 <td><span class="label label-success"><?php echo $value->ip_alias;?></span></td>
-                                                <td><?php echo $value->expire_flag <= 1 && $value->expire_flag >= 0 ? "<span class='label label-important'>$value->opr_time  续费...</span>" : "<span class='label'>$value->opr_time";?></span></td>
+                                                <td><?php echo $value->expire_flag <= 1 && $value->expire_flag >= 0 ? "<span class='label label-important'>$value->opr_time  续费...</span>" : "<span class='label'>$value->opr_time";?></td>
                                             </tr>
                         <?php
                             $i++;
@@ -74,7 +74,7 @@
                    
                     </div>
                 </div>
-            </div>
+                </div></div>
         <!--/.fluid-container-->
         <script src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>
         <script src="<?php echo base_url();?>bootstrap/js/bootstrap.min.js"></script>

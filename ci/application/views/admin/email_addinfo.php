@@ -45,8 +45,18 @@
 									邮箱号:<strong><?php echo $EamilAccount;?></strong>
 								</div>
 								<div style="height:40px">
+									邮箱初始密码:<strong>Abc110</strong>
+								</div>
+								<div style="height:40px">
 									工作部门:<strong><?php echo $department;?></strong>
 								</div>
+								<div style="height:40px">
+			                      邮箱登录地址：<a href="https://exmail.qq.com/login" target="_blank">https://exmail.qq.com/login</a>
+			                    </div>
+			                    <div style="height:40px">
+			                      Foxmail客户端下载地址：
+			                      <a href="http://www.foxmail.com/win/download" target="_blank">http://www.foxmail.com/win/download</a>
+			                    </div>
 							</font>
 							<div style="text-align:center">
       							<a class="btn btn-large btn-primary" href="/admin/email" style="text-align:center">点击返回注册页面</a>

@@ -27,36 +27,28 @@ class Login extends CI_Controller {
         }
         else
         {
-				$user = $this->login_model->get_user_id_from_username($username, $password, '@xkeshi.com');
-				$user_data = explode(',',$user);
-				if ($user != FALSE) {
-					$data = [
-					'u_id'	=> $user_data[0],
-					'u_level_id' => $user_data[1],
-					'username' => $username.'@xkeshi.com',
-					'is_logged_in' => true
-					];
-				}
-				$uid = $username.'@xkeshi.com';
-				$result = $this->login_model->search_user_by_ldap($uid,$password);
-				if ( $user && $result) {
-				$this->session->set_userdata($data);
-				$this->login_model->insert_user_login_logs();  //记录用户登录日志。
-				/*if ($redirect_url) {
-					redirect('/'.$redirect_url);
-				} else {
-					redirect('/'.$this->login_model->get_first_login_url());
-				}*/
-				redirect('/'.$redirect_url);
-				}
-				else if(!$user){
-					echo"<script>alert('账号不存在或人员已离职，请重新输入！');</script>";
-					$this->load->view('default/login',$this->_data);
-				}
-				else if(!$result){
-					echo"<script>alert('密码错误，请重新输入！');</script>";
-					$this->load->view('default/login',$this->_data);
-				}
+			$user = $this->login_model->get_user_id_from_username($username, $password, '@xkeshi.com');
+			$user_data = explode(',',$user);
+			$data = [
+				'u_id'	=> $user_data[0],
+				'u_level_id' => $user_data[1],
+				'u_role_id'=> $user_data[2],
+				'username' => $username.'@xkeshi.com',
+				'is_logged_in' => true
+			];
+			$uid = $username.'@xkeshi.com';
+			$result = $this->login_model->search_user_by_ldap($uid,$password);
+			$this->session->set_userdata($data);
+			$this->login_model->insert_user_login_logs();  //记录用户登录日志。
+			redirect('/'.$redirect_url);
+				// else if(!$user){
+				// 	echo"<script>alert('账号不存在或人员已离职，请重新输入！');</script>";
+				// 	$this->load->view('default/login',$this->_data);
+				// }
+				// else if(!$result){
+				// 	echo"<script>alert('密码错误，请重新输入！');</script>";
+				// 	$this->load->view('default/login',$this->_data);
+				// }
 			// } else {
 			// 	$this->load->view('default/login',$this->_data);
 			// }
@@ -132,9 +124,32 @@ class Login extends CI_Controller {
 	 {
 	 	$this->cool_captcha->createImage();
 	 }
+	public function passwordvalidate()
+	 {
+	 	$account = $this->input->get('account');
+	 	$password = $this->input->get('password');
+	 	$user = $this->login_model->accountvalidate($account);
+	 	$result = $this->login_model->search_user_by_ldap($account,$password);
+	 	if ($user && $result) {
+	 		echo "success";
+	 	}
+	 	else if(!$user){
+			echo "0";
+		}
+		else if(!$result){
+			echo "1";
+		}
+	 }
 	public function logout()
 	{
-		$this->session->sess_destroy();
+		$data = [
+					'u_id'	,
+					'u_level_id' ,
+					'u_role_id',
+					'username' ,
+					'is_logged_in' ,
+					];
+		$this->session->unset_userdata($data);
 		redirect('/login');
-	}	
+	}
 }

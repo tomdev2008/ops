@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://nxb.ops.xkeshi.so/';
+$config['base_url'] = '/';
 /*
 |--------------------------------------------------------------------------
 | Index File

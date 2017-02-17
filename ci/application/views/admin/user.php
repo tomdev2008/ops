@@ -5,6 +5,11 @@
                             <div class="page-header">
                                 <h1>人员管理</h1>
                             </div>
+                      <p>
+                      <?php echo anchor('admin/group', '分组管理 <i class="glyphicon glyphicon-list glyphicon-white"></i>', 'class="btn btn-primary" title="分组管理"');?>
+                      <?php echo anchor('admin/rbac', '权限管理 <i class="glyphicon glyphicon-cog glyphicon-white"></i>', 'class="btn btn-primary" title="权限管理"');?>
+                      <?php echo anchor('admin/rbac/role', '角色管理<i class="glyphicon glyphicon-tags glyphicon-white"></i>', 'class="btn btn-primary" title="角色管理" ');?>
+                      </p>
                             <div class="panel panel-default bootstrap-admin-no-table-panel">
                                 <div class="panel-heading">
                                     <div class="text-muted bootstrap-admin-box-title">部门列表</div>
@@ -51,12 +56,12 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>姓名</th>
+                                                <th width="10%">姓名</th>
                                                 <th>组别</th>
-                                                <th>邮箱</th>
+                                                <th width="10%">邮箱</th>
                                                 <th>手机</th>
                                                 <th>IP</th>
-                                                <th width="10%">职务</th>
+                                                <th width="10%">角色</th>
                                                 <th width="20%">员工操作</th>
                                             </tr>
                                         </thead>
@@ -98,6 +103,7 @@
                                                         else{
                                                             echo "<strong>组长</strong>";
                                                         }
+                                                       
                                                     ?>
                                                 </td>
                                                 <td class="actions">
@@ -274,7 +280,7 @@
                             layer.msg('查询ldap失败！', {time: 3000,icon: 1});
                          }else if (data == "error_ldap_del") {
                             layer.msg('ldap删除信息失败！', {time: 3000,icon: 1});
-                         }else{l
+                         }else{
                             layer.msg(data+'的信息删除成功！', {time: 3000,icon: 1}, function(){
                                 parent.window.location.reload();
                             });

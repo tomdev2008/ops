@@ -210,7 +210,7 @@ class User extends Admin_Controller {
 			// 获取OAuth验证授权
 			$access_token = $this->user_model->get_access_token($cTMailID,$cTMailSecret);
 
-			$result = $this->user_model->add_email($access_token,$cTMailAlias,$name,$tel,$password,$partypath);
+			$result = $this->user_model->add_email($access_token,$cTMailAlias,$name,$tel,$password,$partypath,$tel);
 			$errors = [
 				'user_existed' => '账号已存在！',
 				'pwd_invalid' => '密码不符合安全设定！',

@@ -14,6 +14,9 @@
                             <div class="navbar navbar-default bootstrap-admin-navbar-thin">
                                 <ol class="breadcrumb bootstrap-admin-breadcrumb">
                                     <li>
+                                        <a href="/admin/project">项目管理</a>
+                                    </li>
+                                    <li>
                                         <a href="/admin/projectgroup">项目组管理</a>
                                     </li>
                                     <li>添加项目分组</li>

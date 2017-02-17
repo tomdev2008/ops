@@ -1,5 +1,5 @@
 
-                <div class="span10" id="content">
+                <div class="span9" id="content">
 
                     <div class="row-fluid">
                             <div class="navbar">
@@ -23,7 +23,7 @@
             if ($j % 2 == 0)  echo "<div class=\"row-fluid\">\n";
     ?>   
             
-                        <div class="span6">
+                        <div class="row-fluid">
                             <!-- block -->
                             <div class="block">
                                 <div class="navbar navbar-inner block-header">
@@ -90,6 +90,7 @@
                    
               
                 </div>
+            </div>
             </div>
         <!--/.fluid-container-->
         <script src="<?php echo base_url();?>vendors/jquery-1.9.1.min.js"></script>

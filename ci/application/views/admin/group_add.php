@@ -13,7 +13,10 @@
                             <div class="navbar navbar-default bootstrap-admin-navbar-thin">
                                 <ol class="breadcrumb bootstrap-admin-breadcrumb">
                                     <li>
-                                        <a href="/admin/group">人员分组管理</a>
+                                        <a href="/admin/user">人员管理</a>
+                                    </li>                                    
+                                    <li>
+                                        <a href="/admin/group">人员组管理</a>
                                     </li>
                                     <li>添加人员分组</li>
                                 </ol>

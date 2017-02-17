@@ -14,8 +14,8 @@ class Disconfig extends Public_Controller {
 	public function index()
 	{
 		$id = $this->session->userdata('u_id');
-		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
-		if ($groupleader_flag == 1) {
+		$power_permission_flag = $this->disconfig_model->get_permission_by_id($id);
+		if ($power_permission_flag == 1) {
 		$data = array();
 		$query = $this->db->query('select distinct app_id from ops_disconfig ');
 		$data = $query->result();
@@ -26,14 +26,14 @@ class Disconfig extends Public_Controller {
 		$this->load->view('default/disconfig',$this->_data);
 		$this->load->view('default/footer');
 		} else {
-			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+			echo '很抱歉，您没有权限修改配置中心，请联系运维部！';
 		}
 	}
 
 	public function downloadfile($id=NULL){
 		$id = $this->session->userdata('u_id');
-		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
-		if ($groupleader_flag == 1) {
+		$power_permission_flag = $this->disconfig_model->get_permission_by_id($id);
+		if ($power_permission_flag == 1) {
 		if ($id == NULL) {
 			show_error("error_request",502);
 		}
@@ -47,7 +47,7 @@ class Disconfig extends Public_Controller {
 			echo '该信息属于敏感信息，不能下载，如果有问题，请联系运维组！点击浏览器后退，可返回上一个页面！';
 		}
 		} else {
-			echo '很抱歉，您没有权限修改配置中心，请联系运维组！';
+			echo '很抱歉，您没有权限修改配置中心，请联系运维部！';
 		}
 	}
 	// public function downloadzip(){
@@ -95,8 +95,8 @@ class Disconfig extends Public_Controller {
 	// }
 	public function value($id=NULL){
 		$user_id = $this->session->userdata('u_id');
-		$groupleader_flag = $this->disconfig_model->get_leader_by_id($user_id);
-		if ($groupleader_flag == 1) {
+		$power_permission_flag = $this->disconfig_model->get_permission_by_id($user_id);
+		if ($power_permission_flag == 1) {
 		if ($id == NULL) {
 			show_error("error_request",502);
 		}
@@ -111,8 +111,8 @@ class Disconfig extends Public_Controller {
 	}
 	public function update($id=NULL){
 		$user_id = $this->session->userdata('u_id');
-		$groupleader_flag = $this->disconfig_model->get_leader_by_id($user_id);
-		if ($groupleader_flag == 1) {
+		$power_permission_flag = $this->disconfig_model->get_permission_by_id($user_id);
+		if ($power_permission_flag == 1) {
 		if ($id == NULL) {
 			show_error("error_request",502);
 		}
@@ -127,8 +127,8 @@ class Disconfig extends Public_Controller {
 	}
 	public function amend(){
 		$id = $this->session->userdata('u_id');
-		$groupleader_flag = $this->disconfig_model->get_leader_by_id($id);
-		if ($groupleader_flag == 1) {
+		$power_permission_flag = $this->disconfig_model->get_permission_by_id($id);
+		if ($power_permission_flag == 1) {
 		$this->form_validation->set_rules('text_amend', 'text_amend','required');
 		$this->form_validation->set_rules('id_hidden', 'id_hidden','required');
 		$text_amend = $this->input->post('text_amend');

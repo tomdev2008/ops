@@ -14,9 +14,12 @@
                             <div class="navbar navbar-default bootstrap-admin-navbar-thin">
                                 <ol class="breadcrumb bootstrap-admin-breadcrumb">
                                     <li>
-                                        <a href="/admin/platform">常用链接组管理</a>
-                                    </li>
-                                    <li>添加常用链接分组</li>
+                                        <a href="/admin/gallery">常用链接管理</a>
+                                    </li>   
+                                    <li>
+                                        <a href="/admin/platform">分组管理</a>
+                                    </li>                                                                      
+                                    <li>添加分组</li>
                                 </ol>
                             </div>
                         </div>

@@ -1,9 +1,16 @@
                 <div class="col-md-10">
                         <!-- block -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="page-header">
+                                <h1>日志管理</h1>
+                            </div>
+                        </div>
+                    </div>
                         <div class="col-lg-14">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <div class="text-muted bootstrap-admin-box-title">登录日志管理</div>
+                                    <div class="text-muted bootstrap-admin-box-title">日志管理</div>
                                 </div>
                             <div class="bootstrap-admin-panel-content">
                                     <p>
@@ -28,7 +35,7 @@
                                         '5' => '修改配置',
                                         '6' => '开通邮箱',
                                         '7' => '邮箱禁用',
-                                        //'8' => '邮箱信息修改',
+                                        '8' => '邮箱手机号绑定',
                                     ];
                                     foreach( $operation as $key => $value) {
                                         $active = $OperationId == $key ? "active" : "" ;

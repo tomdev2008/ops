@@ -23,7 +23,12 @@ class Welcome extends ADMIN_Controller {
 		$this->_data['users'] = $data;
 		$this->_data['title'] = '后端管理';
 		$this->_data['ticket_list_undo'] = $this->welcome_model->get_ticket_list_undo();
-		$this->_data['ticket_list_done'] = $this->welcome_model->get_ticket_list_done();		
+		$this->_data['ticket_list_done'] = $this->welcome_model->get_ticket_list_done();	
+		$this->_data['server_list_dev'] = $this->welcome_model->get_dev_server_percent();	
+		$this->_data['server_list_test'] = $this->welcome_model->get_test_server_percent();	
+		$this->_data['server_list_pre'] = $this->welcome_model->get_pre_server_percent();	
+		$this->_data['server_list_pro'] = $this->welcome_model->get_pro_server_percent();	
+		$this->_data['server_list'] = $this->welcome_model->get_server_percent();	
 		$this->load->view('admin/header');
 		$this->load->view('admin/index',$this->_data);
 		$this->load->view('admin/footer');

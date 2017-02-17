@@ -44,7 +44,7 @@ class Email_model extends CI_Model {
 		return $json_obj;
 	}
  	// 添加新成员邮箱(已测试)
- 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$password,$partypath)
+ 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$password,$partypath,$mobile)
  	{
  		// post地址
  		$cTMailContentData = [
@@ -53,7 +53,8 @@ class Email_model extends CI_Model {
 			'alias' => $cTMailAlias,
 			'name' => $name,
 			'password' => $password,
-			'partypath' => $partypath
+			'partypath' => $partypath,
+			'mobile' => $mobile
 		];
 		$headers = array('Content-Type' => 'application/json');
 		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
@@ -76,6 +77,7 @@ class Email_model extends CI_Model {
 	// 获得子部门成员信息
 	public function get_PartyUser($cTMailAccessToken,$partypath)
 	{
+
 		$cTMailContentData = [
 			'access_token' => $cTMailAccessToken,
 			'partypath' => $partypath
@@ -97,13 +99,8 @@ class Email_model extends CI_Model {
 		];
 		$this->db->insert('ops_user_logs', $data);
 		//echo $this->db->set($data)->get_compiled_insert('ops_user_logs');
-		$data = [
-		    'user_ip'  => $this->input->ip_address()
-		];
-		$this->db->where('id', $u_id);
-		$this->db->update('ops_user', $data);
 	}
-	//添加邮箱信息修改操作日志
+	// 添加邮箱手机号绑定日志
 	public function insert_email_update_logs($u_id) {
 		$query = $this->db->query("select * from ops_user where id='$u_id'");
 		$row = $query->row();
@@ -115,11 +112,6 @@ class Email_model extends CI_Model {
 		];
 		$this->db->insert('ops_user_logs', $data);
 		//echo $this->db->set($data)->get_compiled_insert('ops_user_logs');
-		$data = [
-		    'user_ip'  => $this->input->ip_address()
-		];
-		$this->db->where('id', $u_id);
-		$this->db->update('ops_user', $data);
 	}
 	// 重置邮箱密码（已测试）
  	public function mod_email($cTMailAccessToken,$cTMailAlias,$password)
@@ -155,6 +147,20 @@ class Email_model extends CI_Model {
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
  	}
+ 	// 修改个人邮箱信息（添加手机号）
+ 	public function add_email_mobie($cTMailAccessToken,$cTMailAlias,$mobile)
+ 	{
+ 		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
+			'action' => 3,//修改为3
+			'alias' => $cTMailAlias,
+			'mobile' => $mobile,
+		];
+		$headers = array('Content-Type' => 'application/json');
+		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
+		$json_obj = json_decode($response->body,true);
+		return $json_obj;
+ 	}
  	// 开启强制启用微信动态密码
  	public function open_wxtoken($cTMailAccessToken,$cTMailAlias)
  	{
@@ -168,16 +174,10 @@ class Email_model extends CI_Model {
 		return $json_obj;
  	}
  	// 获取用户信息
- 	public function get_account_info($cTMailAlias)
+ 	public function get_account_info($cTMailAccessToken,$cTMailAlias)
  	{
- 		// 企业邮箱的管理员ID
-		$cTMailID = $this->config->item('ops_email_id');
-		// 接口Key
-		$cTMailSecret = $this->config->item('ops_email_key');
-		// 获取OAuth验证授权
-		$access_token = $this->get_access_token($cTMailID,$cTMailSecret);
-		$cTMailContentData = [
-			'access_token' => $access_token,
+ 		$cTMailContentData = [
+			'access_token' => $cTMailAccessToken,
 			'alias' => $cTMailAlias
 		];
 		$headers = array('Content-Type' => 'application/json');

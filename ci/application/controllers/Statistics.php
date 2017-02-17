@@ -71,5 +71,12 @@ class Statistics extends Public_Controller {
 		$change_log = $this->statistics_model->get_change_by_time_env($time,$env);
 		echo nl2br_except_pre($change_log);
 	}
-	// public function test()
+	public function get_contents($upstream_name)
+	{
+		$html = file_get_contents("http://front2.ngx.xkeshi.net/status?upstream_name=".$upstream_name);
+		$order   = array("\r\n", "\n", "\r");
+		$replace = '<br />';
+		$html = str_replace($order,$replace,$html);
+		echo $html;
+	}
 }

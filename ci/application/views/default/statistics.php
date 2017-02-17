@@ -88,14 +88,14 @@
                               ?>
                               			<td style="text-align: center; vertical-align: middle;"><?php echo $submitter?></td>
                               			<td style="text-align: center; vertical-align: middle;">
-                              			<a id="env" href="javascript:;" onclick="get_nginx_upstream('http://front2.ngx.xkeshi.net/status?upstream_name=<?php echo $value->project_env_name?>')"><?php echo $value->project_env_name;?></a>
+                              			<a id="env" href="javascript:;" onclick="get_nginx_upstream('/statistics/get_contents/<?php echo $value->project_env_name?>')"><?php echo $value->project_env_name;?></a>
                               			<div>
                               			<?php echo $alias_name;?>
                               			</div>
                               			</td>
                  						<td style="text-align: center; vertical-align: middle;"><a href="http://jenkins.ops.xkeshi.so/search/?q=<?php echo $value->project_env_name?>" target="_blank"><?php echo "Jenkins发布"?></a></td>
                               			<td style="text-align: center; vertical-align: middle;">
-                              				<a id="log" href="javascript:;" onclick = "get_change_log('http://<?php echo $_SERVER['HTTP_HOST']?>/statistics/change_log?time=<?php echo $product_project_name->time?>&&env=<?php echo $value->project_env_name?>')">Change Log</a>
+                              				<a id="log" href="javascript:;" onclick = "get_change_log('/statistics/change_log?time=<?php echo $product_project_name->time?>&&env=<?php echo $value->project_env_name?>')">Change Log</a>
                               			</td>
                               			<?php if ($value->select == 1) { ?>
                               				<td style="text-align: center; vertical-align: middle;"><span class="label label-important">紧急发布</span></td>

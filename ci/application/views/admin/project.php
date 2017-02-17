@@ -8,7 +8,9 @@
                             </div>
                         </div>
                     </div>
-                                    <p><?php echo anchor('admin/project/add', '新增项目 <i class="glyphicon glyphicon-plus glyphicon-white"></i>', 'class="btn btn-primary" title="增加分组"');?></p>
+                    <p>
+                    <?php echo anchor('admin/projectgroup', '分组管理 <i class="glyphicon glyphicon-wrench glyphicon-white"></i>', 'class="btn btn-primary" title="分组管理"');?>
+                    <?php echo anchor('admin/project/add', '新增项目 <i class="glyphicon glyphicon-plus glyphicon-white"></i>', 'class="btn btn-primary" title="新增项目"');?></p>
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="panel panel-default bootstrap-admin-no-table-panel">

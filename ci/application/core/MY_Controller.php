@@ -92,10 +92,7 @@ class Public_Controller extends MY_Controller {
 		$sql = "SELECT ssh_user FROM ops_user_ssh_server WHERE user_id = ? ";
 		$query = $this->db->query($sql, array($u_id));			
 		$data = $query->result();
-		foreach ($data as $key => $value) {
-			$r[] = $value->ssh_user;
-		}
-		return $r;
+		return $data;
     }
 
 	public function is_logged_in(){
@@ -105,14 +102,30 @@ class Public_Controller extends MY_Controller {
 			redirect($redirect_url);		
 		}		
 	}
-	public function get_header_col_name($classid='1') {
+	public function get_header_col_name() {
 		$user_level_id = $this->session->userdata('u_level_id');
 		if (!$user_level_id) {
 			$user_level_id = 0;
 		}
-		$query = $this->db->query("select * from ops_col_permissions where FIND_IN_SET(".$user_level_id." ,ops_permissions) and class_id='".$classid."' order by id");
+		$user_role_id = $this->session->userdata('u_role_id');
+		$query = $this->db->query("select power_id from ops_user_role_to_power where role_id = '".$user_role_id."' and power_type = '1' order by id");
+		//$query = $this->db->query("select * from ops_col_permissions where FIND_IN_SET(".$user_level_id." ,ops_permissions) and class_id='".$classid."' order by id");
 		return $data_col = $query->result();
 	}	
+    public function get_col_route_name_by_power_id($power_id) {
+        $this->db->select('col_route_name');
+        $this->db->from('ops_user_power');
+        $this->db->where('id', $value->power_id);
+        $data = $this->db->get()->row();
+		return $data;
+    }
+    public function get_power_name_by_power_id($power_id) {
+        $this->db->select('power_name');
+        $this->db->from('ops_user_power');
+        $this->db->where('id', $value->power_id);
+        $data = $this->db->get()->row();
+		return $data;
+    }
 }
 
 class Admin_Controller extends MY_Controller {

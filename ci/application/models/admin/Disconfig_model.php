@@ -288,4 +288,9 @@ class Disconfig_model extends CI_Model {
 		];
 		$this->db->insert('ops_user_logs', $data);
 	}
+	public function DisconfigTemplet($env,$registry_address,$monitor_address)
+	{
+		$templet = $this->config->item['dubbo.properties'];
+		return $this->parser->parse_string($templet,true);
+	}
 }

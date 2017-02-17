@@ -15,7 +15,7 @@ class Test extends Public_Controller {
 		// 接口Key
 		$cTMailSecret = $this->config->item('ops_email_key');
 		// 需要调用信息的邮箱名
-		$cTMailAlias = 'ops@xkeshi.so';
+		$cTMailAlias = 'nxb@xkeshi.so';
 		$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		//$access_token = $this->email_model->get_access_token($cTMailID,$cTMailSecret);
 		print_r($this->email_model->get_account_info($access_token,$cTMailAlias));

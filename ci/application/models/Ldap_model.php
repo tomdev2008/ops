@@ -51,4 +51,17 @@ class Ldap_model extends CI_Model{
 			return false;
 		}
 	}
+	// 添加邮箱手机号绑定日志
+	public function insert_email_update_logs($u_id) {
+		$query = $this->db->query("select * from ops_user where id='$u_id'");
+		$row = $query->row();
+		$data =[
+		    'email' => $row->email,
+		    'name' => $row->name,
+		    'login_ip' => $this->input->ip_address(),
+		    'operation' => "7"
+		];
+		$this->db->insert('ops_user_logs', $data);
+		//echo $this->db->set($data)->get_compiled_insert('ops_user_logs');
+	}
 }

@@ -34,10 +34,9 @@
                                           <?php echo anchor('project/container?pid='.$value->id, $value->name, 'title="查看容器"');?>
                                           <span class="label label-success"><?php echo $value->alias_name?></span>
                                            <span class="label label-success"><?php echo $value->username?></span> 
-                                           <!-- 添加Jenkins，现已废除 -->
-                                           <?php //if ($value->alias_name != NULL){?>
-                                           <!-- <button class="btn btn-info btn-mini" onclick="add_project('http://<?php echo $_SERVER['HTTP_HOST']?>/project/add?server_project=<?php echo $value->id?>&&project_name=<?php echo $value->name?>&&platform_id=<?php echo $value->platform_id?>')">添加Jenkins项目</button> -->
-                                         <?php //}?>
+                                           <?php if ($value->alias_name != NULL){?>
+    <!--                                        <button class="btn btn-info btn-mini" onclick="add_project('http://<?php echo $_SERVER['HTTP_HOST']?>/project/add?server_project=<?php echo $value->id?>&&project_name=<?php echo $value->name?>&&platform_id=<?php echo $value->platform_id?>')">添加Jenkins项目</button> -->
+                                         <?php }?>
                                            </td>
                                           <td>
                                           <?php

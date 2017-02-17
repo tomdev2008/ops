@@ -13,10 +13,12 @@
                                             <a href="/project/">项目管理</a> <span class="divider">/</span>    
                                         </li>
                                         <li class="active">容器信息</li>
+                                        <a class="btn btn-primary" href="javascript:;" style="margin-top:-5px;float: right" onclick="form('/project/form')">项目申请<i class="icon-plus icon-white"></i></a>
                                     </ul>
                                 </div>
                             </div>
-                        </div>                  
+                        </div>  
+
     <?php
         foreach ($container as $value) {
         $ip_environment = [
@@ -48,13 +50,15 @@
         $query = $this->db->query("select id,server_name,server_type,server_project,server_env,server_alias_name,server_status,server_deploy_ip,group_concat(CONCAT(server_deploy_ip,':',server_deploy_port))as ip_repeat from ops_app_server".$container_sql_where."  group by server_name order by id desc");
         $containers = $query->result();
                 if ($ip_data) {
-    ?>   
+    ?>
             <div class="row-fluid">
                         <div class="span12">
                             <!-- block -->
                             <div class="block">
                                 <div class="navbar navbar-inner block-header">
-                                    <div class="muted pull-left">【<?php echo $value->id?>】<a href="#"><?php echo $value->name?><?php echo $ip_server['name']?></a></div>
+                                    <div class="muted pull-left">【<?php echo $value->id?>】<a href="#"><?php echo $value->name?><?php echo $ip_server['name']?></a>
+                                    
+                                    </div>
                                     <div class="pull-right"><span class="badge badge-info"></span>
 
                                     </div>
@@ -128,7 +132,17 @@
         <script src="<?php echo base_url();?>bootstrap/js/bootstrap.min.js"></script>
         <script src="<?php echo base_url();?>vendors/easypiechart/jquery.easy-pie-chart.js"></script>
         <script src="<?php echo base_url();?>assets/scripts.js"></script>
-        <script>
+        <script src="<?php echo base_url();?>layer/layer.js"></script>
+        <script type="text/javascript">
+        function form(url) {
+            layer.open({
+                  type: 2,
+                  title: false,
+                  area: ['1000px', '600px'],
+                  skin: 'layui-layer-rim', //加上边框
+                  content: [url, 'no']
+                });
+        }
         $(function() {
             // Easy pie charts
             $('.chart').easyPieChart({animate: 1000});

@@ -261,8 +261,8 @@ class User_model extends CI_Model {
 		$data = $query->result();
 		return $data;
 	}
-	// 添加新成员邮箱(已测试)
- 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$tel,$password,$partypath)
+// 添加新成员邮箱(已测试)
+ 	public function add_email($cTMailAccessToken,$cTMailAlias,$name,$tel,$password,$partypath,$mobile)
  	{
  		// post地址
  		$cTMailContentData = [
@@ -272,13 +272,15 @@ class User_model extends CI_Model {
 			'tel' => $tel,
 			'name' => $name,
 			'password' => $password,
-			'partypath' => $partypath
+			'partypath' => $partypath,
+			'mobile' => $mobile,
 		];
 		$headers = array('Content-Type' => 'application/json');
 		$response = Requests::post($this->api_address.'user/sync',$headers,$cTMailContentData);
 		$json_obj = json_decode($response->body,true);
 		return $json_obj;
  	}
+
  	// 获取access_token
  	public function get_access_token($cTMailID,$cTMailSecret)
  	{
@@ -374,6 +376,61 @@ class User_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->where('ssh_user', 'dba');
 		$data = $this->db->get()->row('opr_time');
+		return $data;
+	}
+	public function get_user_role_list() {
+		$query = $this->db->query("select * from ops_user_role");
+		$row = $query->result();
+		return $row;
+	}
+	public function get_role_by_id($id) {
+		$this->db->select('role_id');
+		$this->db->from('ops_user');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('role_id');
+		return $data;
+	}	
+	public function get_role_name_by_id($id) {
+		$this->db->select('role_name');
+		$this->db->from('ops_user_role');
+		$this->db->where('id', $id);
+		$data = $this->db->get()->row('role_name');
+		return $data;
+	}
+	public function get_disconfig_by_id($user_id) {
+		$this->db->select('power_status');
+		$this->db->from('ops_user_action');
+		$this->db->where('user_id', $user_id);
+		$this->db->where('power_type', 2);
+		$this->db->where('power_id', 26);
+		$data = $this->db->get()->row('power_status');
+		return $data;
+	}	
+
+	public function get_db_by_id($user_id) {
+		$this->db->select('power_status');
+		$this->db->from('ops_user_action');
+		$this->db->where('user_id', $user_id);
+		$this->db->where('power_type', 2);
+		$this->db->where('power_id', 27);
+		$data = $this->db->get()->row('power_status');
+		return $data;
+	}		
+
+	public function jundge_disconfig_by_user_id($user_id) {
+		$this->db->select('id');
+		$this->db->from('ops_user_action');
+		$this->db->where('power_id', '26');
+		$this->db->where('user_id', $user_id);
+		$data = $this->db->get()->row('id');
+		return $data;
+	}
+	public function jundge_db_by_user_id($user_id) {
+		$this->db->select('id');
+		$this->db->from('ops_user_action');
+		$this->db->where('power_id', '27');
+		$this->db->where('user_id', $user_id);
+		$data = $this->db->get()->row('id');
 		return $data;
 	}
 }

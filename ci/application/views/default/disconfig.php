@@ -43,6 +43,7 @@
                                 <div class="span12">
                                 <!-- tabs -->
                                 <div class="bootstrap-admin-panel-content">
+                                <div><span style="color: red;"><b>配置中心说明文档（必看）：</span><a href="https://ops.xkeshi.so/faq/new_disconf.html#三注意事项" target="view_window">https://ops.xkeshi.so/faq/new_disconf.html#三注意事项</a></div><br>
                                     <ul class="nav nav-tabs">
                                     <li>
                                     <!-- 下拉按钮 -->

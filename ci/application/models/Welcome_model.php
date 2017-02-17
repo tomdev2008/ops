@@ -26,7 +26,18 @@ class Welcome_model extends CI_Model {
 		//echo $res->getBody();
 
 	}
-
+	public function getGallery_byDisplay_id()
+	{
+		$query = $this->db->query("select * from ops_gallery_platform where display_id = '2'");
+		$data = $query->result();
+		return $data;
+	}
+	public function getInfo_byId($id)
+	{
+		$query = $this->db->query("select * from ops_gallery where gallery_platform_id = '".$id."'");
+		$data = $query->result();
+		return $data;
+	}
 	public function get_ops_on_duty() {
 		$query = $this->db->query("select * from ops_user where level_id = '2' and is_dimission = '1'");
 		$row = $query->result();
@@ -49,4 +60,5 @@ class Welcome_model extends CI_Model {
 		$data = $query->result();
 		return $data;
 	}
+	
 }

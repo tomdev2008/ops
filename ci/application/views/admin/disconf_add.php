@@ -1,15 +1,11 @@
     <title>添加配置</title>
-    <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/jquery-2.0.3.min.js"></script>
     <!-- bootstrap -->
-    <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" media="screen" href="<?php echo base_url();?>admin-static/css/bootstrap.min.css">
     <link rel="stylesheet" media="screen" href="<?php echo base_url();?>admin-static/css/bootstrap-theme.min.css">
 	<!-- chosen -->
     <link rel="stylesheet" href="<?php echo base_url();?>chosen_v1.6.2/chosen.css">
-    <script src="<?php echo base_url();?>chosen_v1.6.2/chosen.jquery.js"></script>
     <!-- textarea -->
 	<link href="<?php echo base_url();?>admin-static/vendors/linedtextarea/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
-    <script src="<?php echo base_url();?>admin-static/vendors/linedtextarea/jquery-linedtextarea.js"></script>
     <style>
         #main{margin-left:auto;margin-right:auto;}
     </style>
@@ -19,13 +15,23 @@
                         <div class="col-lg-12">
                             <div class="panel panel-default bootstrap-admin-no-table-panel">
                                 <div class="panel-heading">
-                                    <div class="text-muted bootstrap-admin-box-title">添加友情链接分组</div>
+                                    <div class="text-muted bootstrap-admin-box-title">配置文件添加</div>
                                 </div>
                 <!-- <form class="form-horizontal" role="form"> -->
                 <?php 
                     $attributes = ['class' => 'form-horizontal', 'enctype' => 'multipart/form-data','id' => 'form_sample_1','onsubmit' => 'return buttoncheck()'];
                     echo form_open_multipart('admin/disconfig/add', $attributes);
                     $env = $this->input->get('env');
+                    $env_val = [
+                        '1' => "dev",
+                        '2' => "test",
+                        '3' => "pre",
+                        '4' => "product",
+                    ];
+                    // $registry = $env_val[$env].'registry_address';
+                    // $registry_address = $this->config->item($registry);
+                    // $monitor = $env_val[$env].'monitor_address';
+                    // $monitor_address = $this->config->item($monitor);
                     $projectid = $this->input->get('project_id');
                     $app = $this->input->get('app');
                     $version = $this->input->get('version');
@@ -35,40 +41,6 @@
                     ];
                     echo form_hidden($data);//隐藏传输
                 ?>
-                  <!-- 具体项目 -->
-                  <div class="form-group" style="margin-top:10px">
-                   <!--  <label for="inputEmail3" class="col-sm-2 control-label">选择具体项目</label>
-                    <div class="col-sm-10">
-                      <select data-placeholder="==请选择项目==" id="project" style="width:50%;" class="chosen-select" tabindex="7">
-                            <option value=""></option>
-                            <?php foreach($get_project_name as $project_name){
-                                $project_id = $this->statistics_model->get_id_by_name($project_name->name);
-                            ?>
-                                <option value="<?php echo $project_id?>"><?php echo $project_name->name?></option>
-                            <?php }?>
-                      </select>
-                    </div>
-                  </div> -->
-                  <!-- 子项目 -->
-                  <!-- <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">选择子项目</label>
-                    <div class="col-sm-10">
-                        <select data-placeholder="==请选择子项目==" id="app" name="project" style="width:50%;" class="chosen-select-no-single" tabindex="9">
-                        </select>
-                    </div>
-                  </div> -->
-                  <!-- 环境 -->
-                  <!-- <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">选择环境</label>
-                    <div class="col-sm-10">
-                        <select data-placeholder="==请选择环境==" id="env" name="env" style="width:50%;" class="chosen-select-env" tabindex="9">
-                            <option value=""></option>
-                            <?php foreach($get_env as $value){?>
-                                <option value="<?php echo $value->id?>"><?php echo $value->server_env;?></option>
-                            <?php }?>
-                        </select>
-                    </div>
-                  </div> -->
                   <!-- 提交方式 -->
                   <div class="form-group">
                     <label for="inputPattern" class="col-sm-2 control-label">选择提交方式</label>
@@ -77,6 +49,7 @@
                             <option value=""></option>
                             <option value="uploadfile">上传配置文件</option>
                             <option value="inputtextarea">输入文本</option>
+                            <!-- <option value="inputtextarea">dubbo.properties模板</option> -->
                         </select>
                     </div>
                   </div>
@@ -132,6 +105,11 @@
                         <div class="col-sm-10">
                             <textarea class="lined" rows="15" id="text" cols="80" name="text" style="width:60%;height:40%"></textarea>
                         </div>
+                        <!-- <div class="col-sm-10" id="hidden_templet" style="display: none;">
+                            <textarea class="lined" rows="15" id="hidden_text" cols="80" name="text" style="width:60%;height:40%">
+                                <?php echo $this->disconfig_model->DisconfigTemplet($env_val[$env],$registry_address,$monitor_address); ?>
+                            </textarea>
+                        </div> -->
                   </div>
                 </div>
                   <div class="form-group">
@@ -143,6 +121,10 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url();?>admin-static/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url();?>admin-static/vendors/linedtextarea/jquery-linedtextarea.js"></script>
+    <script src="<?php echo base_url();?>chosen_v1.6.2/chosen.jquery.js"></script>
     <script type="text/javascript">
         // 隐藏自定义元素
         // function hidden(){
@@ -204,6 +186,10 @@
             if ($(this).val() == "inputtextarea") {
                 document.getElementById("inputtext").style.display="";//显示文本输入框
                 document.getElementById("inputfile").style.display="none";//隐藏上传
+                // if($(this).text() == "dubbo.properties模板"){
+                //     $("#show_templet").hide();
+                //     $("#hidden_templet").show();
+                // }
             }
             else{
                 document.getElementById("inputtext").style.display="none";//隐藏文本输入框

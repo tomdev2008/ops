@@ -44,9 +44,9 @@
                                     <li>
                                         <?php echo anchor('ldap?type=update', '修改密码', ' title="修改密码"');?>
                                     </li>
-                                    <!-- <li>
-                                        <?php echo anchor('#profile', '密码重置', ' data-toggle="modal"');?>
-                                    </li> -->
+                                    <li>
+                                        <?php echo anchor('ldap/EmailPasswordReset', '重置邮箱密码',  ' title="邮箱密码重置"');?>
+                                    </li>
                                     <li class="divider"></li>
                                     <li>
                                         <a tabindex="-1" href="<?php echo site_url('login/logout')?>">Logout</a>
@@ -65,19 +65,9 @@
 
                                 </a>
                                 <ul class="dropdown-menu" id="menu1">
-                                    <li>
-                                        <a href="https://qiye.jiankongbao.com" target="_blank">监控宝</a>
-                                    </li>
-                                    <li>
-                                        <a href="http://monit.ops.xkeshi.so:8080" target="_blank">M/MOMIT</a>
-                                    </li>
-               <!--                      <li class="divider"></li>
-                                    <li>
-                                        <a href="#">Other Link</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Other Link</a>
-                                    </li> -->
+                                    <li><a href="http://zabbix.ops.xkeshi.so/zabbix.php?action=dashboard.view">Zabbix监控</a></li>
+                                    <li><a href="http://192.168.181.16/">动力监控系统</a></li>
+                                    <li><a href="http://192.168.181.6/">海康威视监控系统</a></li>
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -104,7 +94,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a tabindex="-1" href="http://192.168.184.2:8090/pages/viewpage.action?1461850255&pageId=4099958" target="_blank">后端开发入职必读手册</a>
+                                        <a tabindex="-1" href="http://confluence.ops.xkeshi.so/pages/viewpage.action?1461850255&pageId=4099958" target="_blank">后端开发入职必读手册</a>
                                     </li>
                                     <li>
                                         <a tabindex="-1" href="ftp://ftp.ops.xkeshi.so/" target="_blank">公司FTP</a>
@@ -116,7 +106,6 @@
                             </li>
                             <li class="dropdown">
                                 <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">员工 <i class="caret"></i>
-
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
@@ -153,7 +142,8 @@
                     foreach ($col_name as $key => $value) {
                  ?>       
                         <li>
-                            <a href="<?php echo site_url($value->col_route_name)?>"><i class="icon-chevron-right"></i> <?php echo $value->col_name?></a>
+                            <a href="<?php $query = $this->db->query("select col_route_name from ops_user_power where id = '".$value->power_id."' order by id");
+$data1 = $query->result(); echo site_url($data1[0]->col_route_name)?>"><i class="icon-chevron-right"></i> <?php $query = $this->db->query("select power_name from ops_user_power where id = '".$value->power_id."' order by id"); $data2 = $query->result();print_r($data2[0]->power_name);?></a>
                         </li>   
                  <?php
                  }}

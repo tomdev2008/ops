@@ -82,4 +82,29 @@ class Welcome_model extends CI_Model {
 		$data = $this->db->get()->row('name');
 		return $data;
 	}
+	public function get_dev_server_percent(){
+		$query = $this->db->query("select * from ops_app_server where server_env = '1' ");
+		$data = $query->result();
+		return $data;
+	}
+	public function get_test_server_percent(){
+		$query = $this->db->query("select * from ops_app_server where server_env = '2' ");
+		$data = $query->result();
+		return $data;
+	}
+	public function get_pre_server_percent(){
+		$query = $this->db->query("select * from ops_app_server where server_env = '3' ");
+		$data = $query->result();
+		return $data;
+	}
+	public function get_pro_server_percent(){
+		$query = $this->db->query("select * from ops_app_server where server_env = '4' ");
+		$data = $query->result();
+		return $data;
+	}
+	public function get_server_percent(){
+		$query = $this->db->query("select * from ops_app_server");
+		$data = $query->result();
+		return $data;
+	}
 }

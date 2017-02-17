@@ -98,7 +98,7 @@
                         $class2 = $this->uri->segment(2);
                         $class3 = $this->uri->segment(3);
                         $this->load->database();
-                        $query = $this->db->query("select * from ops_col_permissions where class_id = 2 ");
+                        $query = $this->db->query("select * from ops_user_power where power_type = '2' ");
                         $permissions = $query->result();
                         // print_r("f:".$class1." s:".$class2." t:".$class3);
                     ?>
@@ -108,30 +108,9 @@
                         <?php foreach ($permissions as $value) {?>
                             <li>
                                 <a href="<?php echo base_url()."admin/".$value->col_route_name?>">
-                                    <i class="<?php echo "glyphicon ".$value->class_name?>"></i><?php echo $value->col_name?>
+                                    <i class="<?php echo "glyphicon ".$value->class_name?>"></i><?php echo $value->power_name?>
                                 </a>
                             </li>
                         <?php } ?>
-                        <!-- <li <?php if($class1 == "admin" && $class2 == "group" && $class3 == "") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/group"><i class="glyphicon glyphicon-chevron-right"></i> 人员分组管理</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "user" && $class3 == "") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/user"><i class="glyphicon glyphicon-chevron-right"></i> 人员管理</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "user" && $class3 == "logs") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/user/logs"><i class="glyphicon glyphicon-chevron-right"></i> 登录日志</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "platform") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/platform"><i class="glyphicon glyphicon-chevron-right"></i> 友情链接组管理</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "gallery") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/gallery"><i class="glyphicon glyphicon-chevron-right"></i> 友情链接内容管理</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "projectgroup") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/projectgroup"><i class="glyphicon glyphicon-chevron-right"></i> 项目组管理</a>
-                        </li>
-                        <li <?php if($class1 == "admin" && $class2 == "project") echo "class='active'"?> >
-                            <a href="<?php echo base_url();?>admin/project"><i class="glyphicon glyphicon-chevron-right"></i> 项目管理</a>
-                        </li> -->
                     </ul>
                 </div>
